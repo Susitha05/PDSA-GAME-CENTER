@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PDSA-GAME-CENTER.iml" filepath="$PROJECT_DIR$/.idea/PDSA-GAME-CENTER.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gameinterfaces.iml" filepath="$PROJECT_DIR$/gameinterfaces.iml" />
     </modules>
   </component>
 </project>
