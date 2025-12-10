@@ -10,10 +10,10 @@
   --accent-color: #8bc34a;
   --bg-cartoon: #8d6e63;
   /* Earthy Brown */
-  --board-color-1: #fff176;
-  /* Yellow */
-  --board-color-2: #9575cd;
-  /* Purple */
+  --board-color-1: #ffeb3b;
+  /* Bright Yellow */
+  --board-color-2: #673ab7;
+  /* Deep Purple */
   --text-main: #3e2723;
   --font-main: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
   --panel-bg: rgba(255, 255, 255, 0.9);
@@ -27,6 +27,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: url('./assets/bg.png') no-repeat center center fixed;
+  background-size: cover;
 }
 
 code {
@@ -166,13 +168,13 @@ button:disabled {
 }
 
 .player-token {
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(circle at 30% 30%, #fff, #d50000);
+  width: 70%;
+  height: 70%;
+  background: rgba(0, 255, 255, 0.9);
   border: 2px solid #fff;
   border-radius: 50%;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
-  z-index: 10;
+  box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, inset 0 0 10px rgba(255, 255, 255, 0.8);
+  z-index: 100;
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -200,11 +202,11 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  color: #d84315;
-  border: 4px solid #d84315;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00e676;
+  border: 2px solid #00e676;
   border-radius: 12px;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px #00e676;
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -255,6 +257,7 @@ button:disabled {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -265,6 +268,7 @@ button:disabled {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -275,9 +279,11 @@ button:disabled {
   0% {
     transform: scale(0);
   }
+
   80% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
   }

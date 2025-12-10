@@ -81,7 +81,7 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
                     const seed = (s.start * 13 + s.end * 7 + i) % 2;
 
                     if (rowDiff <= 3) {
-                        asset = `${process.env.PUBLIC_URL}/assets/1.png`;
+                        asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/1.png` : `${process.env.PUBLIC_URL}/assets/2.png`;
                     } else {
                         asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/3.png` : `${process.env.PUBLIC_URL}/assets/4.png`;
                     }
