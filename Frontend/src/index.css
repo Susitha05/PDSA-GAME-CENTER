@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --primary-color: #ff9800;
   /* Orange */
@@ -21,21 +17,22 @@
 }
 
 body {
+  font-family: var(--font-main);
+  background-color: var(--bg-cartoon);
+  background-image: url('/src/assets/cartoon_game_bg.png');
+  /* Will be set after generation */
+  background-size: cover;
+  background-position: center;
+  color: var(--text-main);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* Snake & Ladder Game Styles */
 .glass-panel {
+  /* Renamed concept, keeping class for compatibility but changing style */
   background: var(--panel-bg);
   border: 4px solid #5d4037;
   border-radius: 16px;
@@ -49,7 +46,6 @@ code {
   padding: 40px 20px;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
 }
 
 .game-header h1 {
@@ -126,6 +122,7 @@ button:disabled {
 .board-container {
   position: relative;
   background: #5d4037;
+  /* Border color */
   padding: 15px;
   border-radius: 20px;
   box-shadow: 0 20px 0 rgba(0, 0, 0, 0.3);
@@ -134,6 +131,7 @@ button:disabled {
 .board-grid {
   display: grid;
   gap: 0px;
+  /* No gap for proper checkerboard */
   background: #fff;
   border-radius: 8px;
   overflow: hidden;
@@ -255,6 +253,7 @@ button:disabled {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -265,6 +264,7 @@ button:disabled {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -275,9 +275,11 @@ button:disabled {
   0% {
     transform: scale(0);
   }
+
   80% {
     transform: scale(1.1);
   }
+
   100% {
     transform: scale(1);
   }
