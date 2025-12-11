@@ -27,8 +27,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url('./assets/bg.png') no-repeat center center fixed;
-  background-size: cover;
+  background: url('./assets/bg.png') top center fixed;
+  background-size: 100% auto;
+  background-repeat: repeat-y;
+  background-color: #2e7d32;
+  /* Fallback green */
 }
 
 code {
@@ -38,10 +41,11 @@ code {
 
 /* Snake & Ladder Game Styles */
 .glass-panel {
-  background: var(--panel-bg);
-  border: 4px solid #5d4037;
+  background: rgba(255, 255, 255, 0.95);
+  /* More opaque for readability */
+  border: 4px solid #3e2723;
   border-radius: 16px;
-  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
 .app-container {
@@ -55,10 +59,15 @@ code {
 }
 
 .game-header h1 {
-  font-size: 3rem;
-  color: #ffecb3;
-  text-shadow: 3px 3px 0 #3e2723;
+  font-size: 4rem;
+  /* Larger */
+  color: #ffffff;
+  /* White for better contrast */
+  text-shadow: 4px 4px 0 #3e2723, -2px -2px 0 #5d4037;
+  /* Stronger 3D effect */
   margin: 0 0 10px 0;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+  letter-spacing: 2px;
 }
 
 /* Controls */
@@ -73,70 +82,80 @@ code {
 .input-field {
   padding: 12px 20px;
   border-radius: 12px;
-  border: 2px solid #5d4037;
-  background: white;
+  border: 3px solid #3e2723;
+  background: #fff;
   color: #3e2723;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  /* Larger */
   outline: none;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 12px 24px;
+  padding: 14px 28px;
+  /* Larger touches */
   border-radius: 12px;
-  border: none;
-  font-weight: 800;
+  border: 2px solid #fff;
+  /* Pop */
+  font-weight: 900;
   cursor: pointer;
   transform: translateY(0);
-  transition: transform 0.1s;
-  font-size: 1rem;
+  transition: transform 0.1s, box-shadow 0.1s;
+  font-size: 1.1rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .btn-primary {
   background: #ff5722;
+  /* Deep Orange */
   color: white;
-  box-shadow: 0 4px #bf360c;
+  box-shadow: 0 6px #bf360c;
 }
 
 .btn-primary:active {
   transform: translateY(4px);
-  box-shadow: 0 0 #bf360c;
+  box-shadow: 0 2px #bf360c;
 }
 
 .btn-secondary {
-  background: #ffca28;
+  background: #ffc107;
+  /* Amber */
   color: #3e2723;
-  box-shadow: 0 4px #f57f17;
+  box-shadow: 0 6px #bf360c;
+  /* Consistent shadow color */
 }
 
 .btn-secondary:active {
   transform: translateY(4px);
-  box-shadow: 0 0 #f57f17;
+  box-shadow: 0 2px #bf360c;
 }
 
 button:disabled {
-  opacity: 0.6;
+  opacity: 0.7;
   cursor: not-allowed;
   transform: none !important;
   box-shadow: none !important;
+  filter: grayscale(0.5);
 }
 
 /* Board */
 .board-container {
   position: relative;
-  background: #5d4037;
-  padding: 15px;
+  background: #3e2723;
+  /* Darker frame */
+  padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 20px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 0 rgba(0, 0, 0, 0.4);
 }
 
 .board-grid {
   display: grid;
-  gap: 0px;
-  background: #fff;
+  gap: 1px;
+  /* Slight gap for grid lines */
+  background: #3e2723;
   border-radius: 8px;
   overflow: hidden;
   border: 4px solid #3e2723;
@@ -146,67 +165,78 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-weight: 900;
   position: relative;
   user-select: none;
-  background: var(--board-color-1);
+  background: #fff9c4;
+  /* Light Yellow */
   color: #3e2723;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
+  /* Larger numbers */
 }
 
 .cell.dark {
-  background: var(--board-color-2);
-  color: white;
+  background: #ffab91;
+  /* Light Orange/Salmon instead of dark purple for better contrast with black text? Or stick to pattern */
+  background: #7e57c2;
+  /* Lighter purple */
+  color: #fff;
 }
 
 .cell .number {
   position: absolute;
-  top: 2px;
-  left: 4px;
-  font-size: 0.7rem;
-  opacity: 0.8;
+  top: 4px;
+  left: 6px;
+  font-size: 0.9rem;
+  opacity: 1;
+  /* Fully visible */
+  color: inherit;
 }
 
 .player-token {
-  width: 70%;
-  height: 70%;
-  background: rgba(0, 255, 255, 0.9);
-  border: 2px solid #fff;
+  width: 75%;
+  height: 75%;
+  background: radial-gradient(circle at 30% 30%, #00ffff, #00acc1);
+  border: 3px solid #fff;
   border-radius: 50%;
-  box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, inset 0 0 10px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px #00ffff;
   z-index: 100;
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Status Panel */
 .status-panel {
-  margin: 20px 0;
-  padding: 20px;
+  margin: 25px 0;
+  padding: 25px;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .status-text {
-  font-size: 1.2rem;
-  color: #3e2723;
-  font-weight: bold;
+  font-size: 1.5rem;
+  /* Much larger */
+  color: #261614;
+  /* Darker */
+  font-weight: 900;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .dice-display {
-  font-size: 2.5rem;
-  width: 70px;
-  height: 70px;
+  font-size: 3rem;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
+  background: #212121;
+  /* Dark Grey */
   color: #00e676;
-  border: 2px solid #00e676;
-  border-radius: 12px;
-  box-shadow: 0 0 15px #00e676;
+  border: 4px solid #00e676;
+  border-radius: 16px;
+  box-shadow: 0 0 20px #00e676;
   animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -217,8 +247,8 @@ button:disabled {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -228,21 +258,23 @@ button:disabled {
 
 .modal-content {
   background: #fff8e1;
-  border: 6px solid #5d4037;
+  border: 8px solid #3e2723;
   color: #3e2723;
-  padding: 40px;
-  border-radius: 20px;
+  padding: 50px;
+  border-radius: 25px;
   text-align: center;
-  max-width: 450px;
+  max-width: 500px;
   width: 90%;
-  box-shadow: 0 20px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.3s ease;
 }
 
 .modal-content h2 {
   margin-top: 0;
-  color: #d84315;
+  color: #bf360c;
   text-transform: uppercase;
+  font-size: 2rem;
+  letter-spacing: 1px;
 }
 
 .grid-choices {

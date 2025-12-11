@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ControlPanel = ({ onStart, onStats, disabled }) => {
+const ControlPanel = ({ onStart, onStats, onSimulate, loadingSim, disabled }) => {
     const [n, setN] = useState(10);
 
     const handleSubmit = (e) => {
@@ -28,7 +28,10 @@ const ControlPanel = ({ onStart, onStats, disabled }) => {
                     Start New Game
                 </button>
                 <button type="button" className="btn-secondary" onClick={onStats}>
-                    📈 View Reports
+                    📈 View Stats
+                </button>
+                <button type="button" className="btn-primary" onClick={onSimulate} disabled={loadingSim || disabled} style={{ background: '#673ab7' }}>
+                    {loadingSim ? 'Running...' : '🔄 Run Simulation (15 Rounds)'}
                 </button>
             </form>
         </div>

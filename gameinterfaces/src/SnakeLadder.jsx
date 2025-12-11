@@ -3,7 +3,8 @@ import Board from './components/Board';
 import ControlPanel from './components/ControlPanel';
 import GuessModal from './components/GuessModal';
 import StatsModal from './components/StatsModal';
-import { startGame, submitGuess } from './services/api';
+import { startGame, submitGuess, runSimulation } from './services/api';
+import SimulationReport from './components/SimulationReport';
 
 function SnakeLadder() {
   const [gameState, setGameState] = useState('SETUP'); // SETUP, GUESSING, PLAYING, FINISHED
@@ -17,6 +18,8 @@ function SnakeLadder() {
   const [moves, setMoves] = useState(0);
   const [showStats, setShowStats] = useState(false);
   const [rolling, setRolling] = useState(false);
+  const [simulationData, setSimulationData] = useState(null);
+  const [loadingSim, setLoadingSim] = useState(false);
 
   const handleStart = async (n) => {
     try {
@@ -31,6 +34,18 @@ function SnakeLadder() {
       setDiceVal(null);
     } catch (e) {
       setMessage('Error starting game');
+    }
+  };
+
+  const handleSimulate = async () => {
+    setLoadingSim(true);
+    try {
+      const data = await runSimulation();
+      setSimulationData(data);
+    } catch (e) {
+      alert("Error running simulation");
+    } finally {
+      setLoadingSim(false);
     }
   };
 
@@ -98,13 +113,15 @@ function SnakeLadder() {
   return (
     <div className="app-container">
       <div className="game-header">
-        <h1>Snake & Ladder</h1>
+        <h1>Snake and Ladder</h1>
         <p style={{ color: '#aaa', margin: 0 }}>Advanced Agentic Problem</p>
       </div>
 
       <ControlPanel
         onStart={handleStart}
         onStats={() => setShowStats(true)}
+        onSimulate={handleSimulate}
+        loadingSim={loadingSim}
         disabled={gameState === 'GUESSING'}
       />
 
@@ -121,6 +138,13 @@ function SnakeLadder() {
       </div>
 
       {showStats && <StatsModal onClose={() => setShowStats(false)} />}
+
+      {simulationData && (
+        <SimulationReport
+          data={simulationData}
+          onClose={() => setSimulationData(null)}
+        />
+      )}
 
       {gameState === 'GUESSING' && (
         <GuessModal choices={choices} onGuess={handleGuess} />
