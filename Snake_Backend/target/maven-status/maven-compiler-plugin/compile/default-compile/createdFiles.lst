@@ -1,0 +1,13 @@
+com\snakeandladder\repository\AlgorithmExecutionRepository.class
+com\snakeandladder\controller\GameController.class
+com\snakeandladder\repository\PlayerResultRepository.class
+com\snakeandladder\model\AlgorithmExecution.class
+com\snakeandladder\model\Snake.class
+com\snakeandladder\service\GameService.class
+com\snakeandladder\service\AlgorithmService.class
+com\snakeandladder\controller\GameController$GameContext.class
+com\snakeandladder\SnakeLadderApplication.class
+com\snakeandladder\exception\GlobalExceptionHandler.class
+com\snakeandladder\model\Board.class
+com\snakeandladder\model\Ladder.class
+com\snakeandladder\model\PlayerResult.class
