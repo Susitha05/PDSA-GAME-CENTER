@@ -21,6 +21,8 @@ function SnakeLadder() {
   const [simulationData, setSimulationData] = useState(null);
   const [loadingSim, setLoadingSim] = useState(false);
 
+  const [gameActive, setGameActive] = useState(false);
+
   const handleStart = async (n) => {
     try {
       const data = await startGame(n);
@@ -32,6 +34,7 @@ function SnakeLadder() {
       setGameState('GUESSING');
       setMessage('');
       setDiceVal(null);
+      setGameActive(true); // Switch to game view
     } catch (e) {
       setMessage('Error starting game');
     }
@@ -47,6 +50,12 @@ function SnakeLadder() {
     } finally {
       setLoadingSim(false);
     }
+  };
+
+  const handleQuit = () => {
+    setGameActive(false);
+    setBoardData(null);
+    setGameState('SETUP');
   };
 
   const handleGuess = async (guess) => {
@@ -112,30 +121,77 @@ function SnakeLadder() {
 
   return (
     <div className="app-container">
-      <div className="game-header">
-        <h1>Snake and Ladder</h1>
-        <p style={{ color: '#aaa', margin: 0 }}>Advanced Agentic Problem</p>
-      </div>
+      {!gameActive && (
+        <div className="menu-view fade-in">
+          <div className="game-header">
+            <h1>Snake and Ladder</h1>
+          </div>
 
-      <ControlPanel
-        onStart={handleStart}
-        onStats={() => setShowStats(true)}
-        onSimulate={handleSimulate}
-        loadingSim={loadingSim}
-        disabled={gameState === 'GUESSING'}
-      />
-
-      <div className="status-panel glass-panel">
-        <span className="status-text">
-          Status: <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>{gameState}</span>
-        </span>
-        <span className="status-text" style={{ flex: 1, textAlign: 'center' }}>
-          {message}
-        </span>
-        <div className="dice-display">
-          {rolling ? '...' : (diceVal || '🎲')}
+          <ControlPanel
+            onStart={handleStart}
+            onStats={() => setShowStats(true)}
+            onSimulate={handleSimulate}
+            loadingSim={loadingSim}
+            disabled={gameState === 'GUESSING' && gameActive}
+          />
         </div>
-      </div>
+      )}
+
+      {gameActive && (
+        <div className="game-view slide-up">
+          <div className="game-toolbar">
+            <button className="btn-small" onClick={handleQuit}>← Exit to Menu</button>
+            <h3 style={{ margin: 0, color: '#fff' }}>Current Game</h3>
+          </div>
+
+          <div className="status-panel glass-panel">
+            <span className="status-text">
+              Status: <span style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>{gameState}</span>
+            </span>
+            <span className="status-text" style={{ flex: 1, textAlign: 'center' }}>
+              {message}
+            </span>
+            <div className="dice-display">
+              {rolling ? '...' : (diceVal || '🎲')}
+            </div>
+          </div>
+
+          {gameState === 'GUESSING' && (
+            <GuessModal choices={choices} onGuess={handleGuess} />
+          )}
+
+          {boardData && (
+            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Board
+                size={boardData.size}
+                snakes={boardData.snakes}
+                ladders={boardData.ladders}
+                playerPos={playerPos}
+              />
+
+              {gameState === 'PLAYING' && (
+                <div style={{ marginTop: '30px' }}>
+                  <button
+                    className="btn-primary"
+                    onClick={handleRoll}
+                    disabled={rolling}
+                    style={{ fontSize: '1.2rem', padding: '15px 60px' }}
+                  >
+                    {rolling ? 'Rolling...' : 'Roll Dice'}
+                  </button>
+                </div>
+              )}
+
+              {gameState === 'FINISHED' && (
+                <div style={{ marginTop: '30px' }}>
+                  <h2 style={{ color: 'var(--primary-color)', fontSize: '2rem' }}>Congratulations!</h2>
+                  <button className="btn-secondary" onClick={handleQuit}>Play Again</button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {showStats && <StatsModal onClose={() => setShowStats(false)} />}
 
@@ -144,40 +200,6 @@ function SnakeLadder() {
           data={simulationData}
           onClose={() => setSimulationData(null)}
         />
-      )}
-
-      {gameState === 'GUESSING' && (
-        <GuessModal choices={choices} onGuess={handleGuess} />
-      )}
-
-      {boardData && (
-        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Board
-            size={boardData.size}
-            snakes={boardData.snakes}
-            ladders={boardData.ladders}
-            playerPos={playerPos}
-          />
-
-          {gameState === 'PLAYING' && (
-            <div style={{ marginTop: '30px' }}>
-              <button
-                className="btn-primary"
-                onClick={handleRoll}
-                disabled={rolling}
-                style={{ fontSize: '1.2rem', padding: '15px 40px' }}
-              >
-                {rolling ? 'Rolling...' : 'Roll Dice'}
-              </button>
-            </div>
-          )}
-
-          {gameState === 'FINISHED' && (
-            <div style={{ marginTop: '30px' }}>
-              <h2 style={{ color: 'var(--primary-color)' }}>Congratulations!</h2>
-            </div>
-          )}
-        </div>
       )}
     </div>
   );
