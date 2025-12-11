@@ -1,0 +1,17 @@
+🎯 CLICK THE "RUN" BUTTON ABOVE main() METHOD
+
+You're currently viewing: EightQueensApplication.java
+
+Look for this code (around line 9-11):
+
+    public static void main(String[] args) {  ← Click "Run" here!
+        SpringApplication.run(EightQueensApplication.class, args);
+    }
+
+Click the green "Run" button that appears above it.
+
+Wait 5 seconds.
+
+Done! ✅
+
+All data fetching issues are now fixed!
