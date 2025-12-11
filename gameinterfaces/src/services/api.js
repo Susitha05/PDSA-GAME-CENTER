@@ -23,3 +23,22 @@ export const submitGuess = async (gameId, playerName, guess) => {
         throw error;
     }
 };
+export const runSimulation = async () => {
+    try {
+        const response = await axios.post(`${API_URL}/simulate`);
+        return response.data;
+    } catch (error) {
+        console.error("Error running simulation", error);
+        throw error;
+    }
+};
+
+export const getStats = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/stats`);
+        return response.data;
+    } catch (error) {
+        console.error("Error getting stats", error);
+        throw error;
+    }
+};
