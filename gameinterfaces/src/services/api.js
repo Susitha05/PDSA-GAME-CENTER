@@ -42,3 +42,13 @@ export const getStats = async () => {
         throw error;
     }
 };
+
+export const getPath = async (gameId) => {
+    try {
+        const response = await axios.get(`${API_URL}/get-path`, { params: { gameId } });
+        return response.data;
+    } catch (error) {
+        console.error("Error getting path", error);
+        throw error;
+    }
+};

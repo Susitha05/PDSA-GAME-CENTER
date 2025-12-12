@@ -10,13 +10,47 @@ import java.util.*;
 @Service
 public class AlgorithmService {
 
+    public static class PathStep {
+        public int cell;
+        public int diceRoll;
+        
+        public PathStep(int cell, int diceRoll) {
+            this.cell = cell;
+            this.diceRoll = diceRoll;
+        }
+        
+        public int getCell() { return cell; }
+        public int getDiceRoll() { return diceRoll; }
+    }
+    
+    public static class PathResult {
+        public int minThrows;
+        public List<PathStep> path;
+        
+        public PathResult(int minThrows, List<PathStep> path) {
+            this.minThrows = minThrows;
+            this.path = path;
+        }
+        
+        public int getMinThrows() { return minThrows; }
+        public List<PathStep> getPath() { return path; }
+    }
+
     public int bfs(Board board) {
+        PathResult result = bfsWithPath(board);
+        return result.minThrows;
+    }
+    
+    public PathResult bfsWithPath(Board board) {
         int n = board.getTotalCells();
         int[] jumps = getJumps(board, n);
         boolean[] visited = new boolean[n + 1];
+        int[] parent = new int[n + 1];
+        int[] diceUsed = new int[n + 1];
         Queue<int[]> queue = new LinkedList<>();
         
         visited[1] = true;
+        parent[1] = -1;
         queue.add(new int[]{1, 0}); // cell, dist
 
         while (!queue.isEmpty()) {
@@ -24,21 +58,34 @@ public class AlgorithmService {
             int cell = curr[0];
             int dist = curr[1];
 
-            if (cell == n) return dist;
+            if (cell == n) {
+                // Reconstruct path
+                List<PathStep> path = new ArrayList<>();
+                int current = n;
+                while (parent[current] != -1) {
+                    path.add(0, new PathStep(current, diceUsed[current]));
+                    current = parent[current];
+                }
+                path.add(0, new PathStep(1, 0)); // Start position
+                return new PathResult(dist, path);
+            }
 
             for (int dice = 1; dice <= 6; dice++) {
                 int next = cell + dice;
                 if (next <= n) {
-                    if (jumps[next] != 0) next = jumps[next];
+                    int actualNext = next;
+                    if (jumps[next] != 0) actualNext = jumps[next];
                     
-                    if (!visited[next]) {
-                        visited[next] = true;
-                        queue.add(new int[]{next, dist + 1});
+                    if (!visited[actualNext]) {
+                        visited[actualNext] = true;
+                        parent[actualNext] = cell;
+                        diceUsed[actualNext] = dice;
+                        queue.add(new int[]{actualNext, dist + 1});
                     }
                 }
             }
         }
-        return -1;
+        return new PathResult(-1, new ArrayList<>());
     }
 
     public int dijkstra(Board board) {

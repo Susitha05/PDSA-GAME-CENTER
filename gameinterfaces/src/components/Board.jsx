@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Board = ({ size, snakes, ladders, playerPos }) => {
+const Board = ({ size, snakes, ladders, playerPos, computerPos }) => {
     const totalCells = size * size;
     const cells = Array.from({ length: totalCells }, (_, i) => totalCells - i);
 
@@ -53,7 +53,10 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
                     return visualCells.map((num) => (
                         <div key={num} className={`cell ${num % 2 === 0 ? 'dark' : ''}`}>
                             <span className="number">{num}</span>
-                            {playerPos === num && <div className="player-token" />}
+                            <div className="tokens-container">
+                                {playerPos === num && <div className="player-token" title="You" />}
+                                {computerPos === num && <div className="computer-token" title="Computer" />}
+                            </div>
                         </div>
                     ));
                 })()}
@@ -69,39 +72,39 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
                     const endRow = Math.floor((s.end - 1) / size);
                     const rowDiff = startRow - endRow;
 
-                    // Asset Selection Logic
-                    // 1, 2 = Short (150-500px, roughly 1-3 rows?)
-                    // 3, 4 = Long (1000px+, can stretch)
-
-                    // Logic: If rowDiff <= 3, use Short [1, 2]
-                    // If rowDiff > 3, use Long [3, 4]
-
+                    // Asset Selection:
+                    // - 300px assets for short snakes (rowDiff <= 3)
+                    // - 1000px assets for long snakes (rowDiff > 3)
+                    const isShort = rowDiff <= 3;
                     let asset;
-                    // Seeded random pick to separate instances
                     const seed = (s.start * 13 + s.end * 7 + i) % 2;
 
-                    if (rowDiff <= 3) {
-                        asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/1.png` : `${process.env.PUBLIC_URL}/assets/2.png`;
+                    if (isShort) {
+                        asset = seed === 0
+                            ? `${process.env.PUBLIC_URL}/assets/300pxSnake.png`
+                            : `${process.env.PUBLIC_URL}/assets/300pxSnake2.png`;
                     } else {
-                        asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/3.png` : `${process.env.PUBLIC_URL}/assets/4.png`;
+                        asset = seed === 0
+                            ? `${process.env.PUBLIC_URL}/assets/1000pxSnake.png`
+                            : `${process.env.PUBLIC_URL}/assets/1000pxSnake2.png`;
                     }
 
                     const dx = end.x - start.x;
                     const dy = end.y - start.y;
-                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const visualLength = Math.sqrt(dx * dx + dy * dy);
                     const angle = Math.atan2(dy, dx) * (180 / Math.PI) - 90;
 
                     const midX = (start.x + end.x) / 2;
                     const midY = (start.y + end.y) / 2;
 
-                    // Width Logic:
-                    // Short assets (1,2) are 150-500px length. 
-                    // Long assets (3,4) are 1000px length.
-                    // We should keep them relatively proportional.
-                    // But for "clean cartoon" look, maybe fixed width is safe if file aspect ratio is good.
-                    // Let's us e 60% of cell size.
                     const cellSize = 600 / size;
-                    const assetWidth = cellSize * 0.45; // Reduced for less overlap
+                    // For 300px: use fixed dimensions to avoid stretching
+                    // For 1000px: scale to fit the gap
+                    const assetWidth = isShort ? cellSize * 0.55 : cellSize * 0.45;
+                    // Height: use natural proportions for short, stretch for long
+                    const assetHeight = isShort
+                        ? Math.min(visualLength, 35) // Cap height for 300px assets
+                        : visualLength;
 
                     return (
                         <img
@@ -113,11 +116,12 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
                                 top: `${midY}%`,
                                 left: `${midX}%`,
                                 width: `${assetWidth}px`,
-                                height: `${length}%`,
+                                height: `${assetHeight}%`,
+                                objectFit: 'contain',
                                 transform: `translate(-50%, -50%) rotate(${angle}deg)`,
                                 transformOrigin: 'center center',
-                                filter: 'drop-shadow(2px 2px 2px rgba(0,0,0,0.3))',
-                                zIndex: 5, // Snakes below ladders
+                                filter: 'drop-shadow(2px 2px 3px rgba(0,0,0,0.4))',
+                                zIndex: 5,
                                 opacity: 0.95
                             }}
                         />
@@ -129,30 +133,38 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
 
                     const startRow = Math.floor((l.start - 1) / size);
                     const endRow = Math.floor((l.end - 1) / size);
-                    const rowDiff = endRow - startRow; // Positive for Ladder
+                    const rowDiff = endRow - startRow;
 
-                    // 5, 6 = Short
-                    // 7, 8 = Long
-
+                    // Asset Selection:
+                    // - 300px assets for short ladders (rowDiff <= 3)
+                    // - 1000px assets for long ladders (rowDiff > 3)
+                    const isShort = rowDiff <= 3;
                     let asset;
                     const seed = (l.start * 11 + l.end * 3 + i) % 2;
 
-                    if (rowDiff <= 3) {
-                        asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/5.png` : `${process.env.PUBLIC_URL}/assets/6.png`;
+                    if (isShort) {
+                        asset = seed === 0
+                            ? `${process.env.PUBLIC_URL}/assets/300pxLadder.png`
+                            : `${process.env.PUBLIC_URL}/assets/300pxLadder2.png`;
                     } else {
-                        asset = seed === 0 ? `${process.env.PUBLIC_URL}/assets/7.png` : `${process.env.PUBLIC_URL}/assets/8.png`;
+                        asset = seed === 0
+                            ? `${process.env.PUBLIC_URL}/assets/1000pxLadder.png`
+                            : `${process.env.PUBLIC_URL}/assets/1000pxLadder2.png`;
                     }
 
                     const dx = end.x - start.x;
                     const dy = end.y - start.y;
-                    const length = Math.sqrt(dx * dx + dy * dy);
+                    const visualLength = Math.sqrt(dx * dx + dy * dy);
                     const angle = Math.atan2(dy, dx) * (180 / Math.PI) - 90;
 
                     const midX = (start.x + end.x) / 2;
                     const midY = (start.y + end.y) / 2;
 
                     const cellSize = 600 / size;
-                    const assetWidth = cellSize * 0.45; // Reduced for less overlap
+                    const assetWidth = isShort ? cellSize * 0.55 : cellSize * 0.45;
+                    const assetHeight = isShort
+                        ? Math.min(visualLength, 35)
+                        : visualLength;
 
                     return (
                         <img
@@ -164,11 +176,12 @@ const Board = ({ size, snakes, ladders, playerPos }) => {
                                 top: `${midY}%`,
                                 left: `${midX}%`,
                                 width: `${assetWidth}px`,
-                                height: `${length}%`,
+                                height: `${assetHeight}%`,
+                                objectFit: 'contain',
                                 transform: `translate(-50%, -50%) rotate(${angle}deg)`,
                                 transformOrigin: 'center center',
-                                filter: 'drop-shadow(2px 2px 2px rgba(0,0,0,0.3))',
-                                zIndex: 10, // Ladders above snakes
+                                filter: 'drop-shadow(2px 2px 3px rgba(0,0,0,0.4))',
+                                zIndex: 10,
                                 opacity: 0.95
                             }}
                         />

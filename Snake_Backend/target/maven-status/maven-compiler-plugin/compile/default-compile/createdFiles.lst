@@ -6,7 +6,9 @@ com\snakeandladder\model\Snake.class
 com\snakeandladder\service\GameService.class
 com\snakeandladder\service\AlgorithmService.class
 com\snakeandladder\controller\GameController$GameContext.class
+com\snakeandladder\service\AlgorithmService$PathResult.class
 com\snakeandladder\SnakeLadderApplication.class
+com\snakeandladder\service\AlgorithmService$PathStep.class
 com\snakeandladder\exception\GlobalExceptionHandler.class
 com\snakeandladder\model\Board.class
 com\snakeandladder\model\Ladder.class

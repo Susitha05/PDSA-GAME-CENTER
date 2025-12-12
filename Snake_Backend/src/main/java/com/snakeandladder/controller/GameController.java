@@ -39,6 +39,7 @@ public class GameController {
     static class GameContext {
         private Board board;
         private int minThrows;
+        private List<AlgorithmService.PathStep> optimalPath;
         private Map<String, Long> algorithmTimes = new HashMap<>();
     }
 
@@ -55,9 +56,10 @@ public class GameController {
         int minThrows = -1;
         Map<String, Long> times = new HashMap<>();
 
-        // BFS
+        // BFS with path
         start = System.nanoTime();
-        minThrows = algorithmService.bfs(board);
+        AlgorithmService.PathResult pathResult = algorithmService.bfsWithPath(board);
+        minThrows = pathResult.getMinThrows();
         end = System.nanoTime();
         times.put("BFS", end - start);
         saveAlgoStats("BFS", end - start, minThrows, n);
@@ -80,6 +82,7 @@ public class GameController {
         GameContext ctx = new GameContext();
         ctx.setBoard(board);
         ctx.setMinThrows(minThrows);
+        ctx.setOptimalPath(pathResult.getPath());
         ctx.setAlgorithmTimes(times);
         activeGames.put(gameId, ctx);
 
@@ -117,6 +120,15 @@ public class GameController {
         }
 
         return ResponseEntity.ok(Map.of("correct", isCorrect, "actual", ctx.getMinThrows()));
+    }
+    
+    @GetMapping("/get-path")
+    public ResponseEntity<?> getPath(@RequestParam String gameId) {
+        GameContext ctx = activeGames.get(gameId);
+        if (ctx == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(Map.of("path", ctx.getOptimalPath()));
     }
     
     // Endpoint to validate move (Optional, for "Code used for Logic")

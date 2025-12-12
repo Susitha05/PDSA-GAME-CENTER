@@ -307,15 +307,54 @@ body {
   opacity: 0.6;
 }
 
+/* Tokens */
+.tokens-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 .player-token {
-  width: 65%;
-  height: 65%;
+  width: 24px;
+  height: 24px;
   background: var(--primary-color);
   border-radius: 50%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   z-index: 10;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 2px solid white;
+  position: absolute;
+}
+
+.computer-token {
+  width: 24px;
+  height: 24px;
+  background: #ef4444;
+  /* Red 500 */
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 9;
+  /* Slightly below player if overlapping */
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid white;
+  position: absolute;
+  /* Offset logic if both present? */
+}
+
+/* If both tokens are in the same container, offset them */
+.tokens-container:has(.player-token):has(.computer-token) .player-token {
+  transform: translate(-6px, -6px);
+}
+
+.tokens-container:has(.player-token):has(.computer-token) .computer-token {
+  transform: translate(6px, 6px);
 }
 
 /* Animations */
