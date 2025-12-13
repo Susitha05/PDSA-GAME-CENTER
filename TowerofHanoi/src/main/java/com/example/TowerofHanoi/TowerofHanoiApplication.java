@@ -1,13 +1,13 @@
-package com.towerofhanoi.demo;
+package com.example.TowerofHanoi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class TowerofHanoiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(TowerofHanoiApplication.class, args);
 	}
 
 }

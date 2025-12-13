@@ -8,10 +8,10 @@
 		<version>4.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.towerofhanoi</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>TowerofHanoi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>TowerofHanoi</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
