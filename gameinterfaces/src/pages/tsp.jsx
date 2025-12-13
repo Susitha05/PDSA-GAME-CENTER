@@ -3,62 +3,67 @@ import City from "../assets/img/citymap.jpg"
 import {HiOutlinePlay, HiPlay, HiRefresh} from "react-icons/hi";
 
 function TravellingSellsMan(){
-    const [dots,setDots] = useState([])
-    const [path,setpath] = useState([])
-    const [totalDistance,setdistance] = useState(0)
+    const [dots, setDots] = useState([]);
+    const [path, setPath] = useState([]);
+    const [userPath, setUserPath] = useState([]);
+    const [isCompleted, setIsCompleted] = useState(false);
+    const [totalDistance, setTotalDistance] = useState(0);
+
+    // Load new game
+    const loadNewGame = async () => {
+        const res = await fetch("http://localhost:8080/tsp/new");
+        const data = await res.json();
+        setDots(data.points);
+        setPath([]);
+        setUserPath([]);
+        setIsCompleted(false);
+        setTotalDistance(0);
+    };
 
     useEffect(() => {
-        const pts = Array.from({length:8}).map(()=>({
-            x: Math.random() * 90 + 5,
-                y: Math.random() * 90 + 5,
-        }));
-        setDots(pts)
+        loadNewGame();
     }, []);
 
-    const distance = (a,b)=>{
-        const dx =a.x -b.x;
-        const dy = a.y - b.y
-        return Math.sqrt(dx * dx + dy * dy)
-    }
-    const solveTSP = () => {
-        if (dots.length === 0) return;
+    // Solve TSP via backend
+    const solveTSP = async () => {
+        const res = await fetch("http://localhost:8080/tsp/solve", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(dots)
+        });
+        const data = await res.json();
+        const orderedDots = data.shortestPath.map(i => dots[i]);
+        setPath(orderedDots);
+        setTotalDistance(data.distance.toFixed(2));
+    };
 
-        const visited = new Set();
-        let current = dots[0]; // start point
-        let order = [current];
-        visited.add(dots.indexOf(current));
+    // Handle user clicking a dot
+    const handleUserClick = async (i) => {
+        if (isCompleted) return;
+        if (!userPath.includes(i)) {
+            const newPath = [...userPath, i];
+            setUserPath(newPath);
 
-        while (visited.size < dots.length) {
-            let nextDot = null;
-            let shortest = Infinity;
+            if (newPath.length === dots.length) {
+                setIsCompleted(true);
 
-            dots.forEach((d, idx) => {
-                if (!visited.has(idx)) {
-                    const dist = distance(current, d);
-                    if (dist < shortest) {
-                        shortest = dist;
-                        nextDot = d;
-                    }
+                // Check path via backend
+                const res = await fetch("http://localhost:8080/tsp/check", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({dots, userPath: newPath})
+                });
+                const data = await res.json();
+                if (!data.correct) {
+                    alert("Wrong Path! Showing correct path.");
+                } else {
+                    alert("Correct path!");
                 }
-            });
 
-            order.push(nextDot);
-            visited.add(dots.indexOf(nextDot));
-            current = nextDot;
+                const correctDots = data.correctPath.map(idx => dots[idx]);
+                setPath(correctDots);
+            }
         }
-
-        // return to start for full loop
-        order.push(order[0]);
-
-        // calculate total distance
-        let total = 0;
-        for (let i = 0; i < order.length - 1; i++) {
-            total += distance(order[i], order[i + 1]);
-        }
-
-        setpath(order);
-        setdistance(total.toFixed(2));
-        console.log(total.toFixed(2));
     };
 
     return(
@@ -69,13 +74,8 @@ function TravellingSellsMan(){
         <div className="w-full h-full">
             <div className="flex w-full h-[600px] mt-4">
                 <div
-                    className="relative flex w-1/2 ml-4"
-                    style={{
-                        backgroundImage: `url(${City})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                    }}
-                >
+                    className="relative flex w-1/2 ml-4">
+                    <img src={City} alt="map" className="w-full h-full object-cover"/>
                     {dots.map((dot, i) => (
                         <div
                             key={i}
@@ -85,8 +85,20 @@ function TravellingSellsMan(){
                                 top: `${dot.y}%`,
                                 transform: "translate(-50%, -50%)",
                             }}
+                            onClick={()=>handleUserClick(i)}
                         />
                     ))}
+
+                    {userPath.length > 1 && userPath.map((idx,i)=>{
+                        if(i === userPath.length-1) return null;
+                        const p1 = dots[userPath[i]];
+                        const p2 = dots[userPath[i+1]];
+                        return (
+                            <svg key={"u"+i} className="absolute w-full h-full top-0 left-0 pointer-events-none">
+                                <line x1={`${p1.x}%`} y1={`${p1.y}%`} x2={`${p2.x}%`} y2={`${p2.y}%`} stroke="blue" strokeWidth="3"/>
+                            </svg>
+                        );
+                    })}
 
                     {/* Draw TSP path */}
                     {path.length > 1 &&
@@ -139,7 +151,7 @@ function TravellingSellsMan(){
                 <button
                     className="flex justify-center items-center bg-amber-700 p-2 px-8 ml-4 rounded-2xl gap-2 shadow-lg"
                     onClick={()=>{
-                        window.location.reload()
+                        loadNewGame()
                     }}
                 >
                     <HiRefresh className="w-12 h-12"/>
