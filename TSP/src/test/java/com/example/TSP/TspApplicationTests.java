@@ -1,10 +1,10 @@
-package com.example.PDSA.Game;
+package com.example.tsp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PdsaGameApplicationTests {
+class TspApplicationTests {
 
 	@Test
 	void contextLoads() {
