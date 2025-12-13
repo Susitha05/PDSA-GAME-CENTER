@@ -1,13 +1,13 @@
-package com.example.PDSA.Game;
+package com.example.tsp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PdsaGameApplication {
+public class TspApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PdsaGameApplication.class, args);
+		SpringApplication.run(TspApplication.class, args);
 	}
 
 }

@@ -3,12 +3,14 @@
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import MainPortal from './main_portal'
 import GameDisplay from './pages/game_display'
+import Tsp from './pages/tsp'
 function App() {
   return(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPortal />}/>
             <Route path="/gameDisplay" element={<GameDisplay />}/>
+            <Route path="/tspGame" element={<Tsp />}/>
         </Routes>
       </BrowserRouter>
   )

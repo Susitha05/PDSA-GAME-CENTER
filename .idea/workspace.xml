@@ -20,6 +20,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -28,7 +31,7 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< Updated upstream
+
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;JavaScript Debug.Debug Application.executor&quot;: &quot;Run&quot;,
@@ -49,7 +52,7 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;ts.external.directory.path&quot;: &quot;D:\\IntelliJ IDEA 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-=======
+
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "JavaScript Debug.Debug Application.executor": "Run",
@@ -76,17 +79,35 @@
     "settings.editor.selected.configurable": "project.propCompiler",
     "ts.external.directory.path": "D:\\IntelliJ IDEA 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
->>>>>>> Stashed changes
-  }
-}]]></component>
+</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Admin\Documents\GitHub\PDSA-GAME-CENTER\gameinterfaces\src\assets\img" />
+      <recent name="C:\Users\Admin\Documents\GitHub\PDSA-GAME-CENTER" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="Application" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.TspApplication">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
       <method v="2" />
+    </configuration>
+    <configuration name="TspApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="tsp" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.tsp.TspApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
   </component>
   <component name="SharedIndexes">
@@ -115,6 +136,23 @@
       <workItem from="1765188771588" duration="1556000" />
       <workItem from="1765194453507" duration="1770000" />
       <workItem from="1765202068855" duration="6188000" />
+      <workItem from="1765292491246" duration="606000" />
+      <workItem from="1765335166606" duration="3381000" />
+      <workItem from="1765389109419" duration="655000" />
+      <workItem from="1765425429371" duration="14932000" />
+      <workItem from="1765521214499" duration="599000" />
+      <workItem from="1765522348486" duration="3605000" />
+      <workItem from="1765526457274" duration="71000" />
+      <workItem from="1765526537629" duration="508000" />
+      <workItem from="1765527265216" duration="8000" />
+      <workItem from="1765553804148" duration="14000" />
+      <workItem from="1765553831935" duration="1248000" />
+      <workItem from="1765592354412" duration="123000" />
+      <workItem from="1765592668809" duration="1204000" />
+      <workItem from="1765596246234" duration="403000" />
+      <workItem from="1765596715517" duration="43000" />
+      <workItem from="1765596784972" duration="100000" />
+      <workItem from="1765596894199" duration="719000" />
     </task>
     <servers />
   </component>
