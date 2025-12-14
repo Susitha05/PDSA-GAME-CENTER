@@ -95,6 +95,9 @@
   box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3), 0 0 0 8px rgba(16, 185, 129, 0.1);
   border-radius: 10px;
   overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .col-labels {
@@ -117,17 +120,24 @@
 
 .board-row {
   display: flex;
+  width: 100%;
+  flex: 1 1 12.5%;
+  min-height: 0;
 }
 
 .cell {
   width: 12.5%;
+  flex: 0 0 12.5%;
   aspect-ratio: 1/1;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
   position: relative;
+  box-sizing: border-box;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .cell.white {
@@ -139,8 +149,8 @@
 }
 
 .cell:hover {
-  opacity: 0.8;
-  transform: scale(1.05);
+  opacity: 0.85;
+  filter: brightness(1.1);
 }
 
 .cell.has-queen {
@@ -149,15 +159,36 @@
 }
 
 .cell.attacked {
-  background-color: rgba(239, 68, 68, 0.4);
-  box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.3);
+  background-color: rgba(239, 68, 68, 0.5) !important;
+  box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.6);
+  position: relative;
+}
+
+.cell.attacked::after {
+  content: '✕';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(20px, 3vw, 32px);
+  color: rgba(220, 38, 38, 0.8);
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .queen {
-  font-size: clamp(36px, 5vw, 58px);
+  font-size: clamp(32px, 4.5vw, 52px);
   color: #ffffff;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5), 0 0 10px rgba(251, 191, 36, 0.5);
   filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .controls {

@@ -1,5 +1,7 @@
 package com.PDSA.Eight_Queens.service;
 
+import com.PDSA.Eight_Queens.algorithm.SequentialQueensSolver;
+import com.PDSA.Eight_Queens.algorithm.ThreadedQueensSolver;
 import com.PDSA.Eight_Queens.data.*;
 import com.PDSA.Eight_Queens.dto.AnswerDTO;
 import com.PDSA.Eight_Queens.dto.ComputationResultDTO;
@@ -14,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -40,13 +40,14 @@ public class EQService {
 
     /**
      * Sequential algorithm to find all 8-Queens solutions using backtracking
+     * Matches Python sequential.py implementation using sets for tracking
      */
     public ComputationResultDTO findAllSolutionsSequential() {
         long startTime = System.currentTimeMillis();
-        List<int[]> solutions = new ArrayList<>();
 
-        int[] board = new int[BOARD_SIZE];
-        solveNQueensSequential(board, 0, solutions);
+        // Use separate SequentialQueensSolver class
+        SequentialQueensSolver solver = new SequentialQueensSolver();
+        List<int[]> solutions = solver.findAllSolutions();
 
         long endTime = System.currentTimeMillis();
         long timeTaken = endTime - startTime;
@@ -63,34 +64,15 @@ public class EQService {
 
     /**
      * Threaded algorithm to find all 8-Queens solutions using parallel processing
+     * Matches Python threaded.py implementation with threads per first column
      */
     public ComputationResultDTO findAllSolutionsThreaded() throws InterruptedException, ExecutionException {
         long startTime = System.currentTimeMillis();
 
-        int numThreads = Runtime.getRuntime().availableProcessors();
-        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
-        List<Future<List<int[]>>> futures = new ArrayList<>();
+        // Use separate ThreadedQueensSolver class
+        ThreadedQueensSolver solver = new ThreadedQueensSolver();
+        List<int[]> allSolutions = solver.findAllSolutions();
 
-        // Divide work by first queen position
-        for (int firstCol = 0; firstCol < BOARD_SIZE; firstCol++) {
-            final int col = firstCol;
-            Future<List<int[]>> future = executor.submit(() -> {
-                List<int[]> threadSolutions = new ArrayList<>();
-                int[] board = new int[BOARD_SIZE];
-                board[0] = col;
-                solveNQueensSequential(board, 1, threadSolutions);
-                return threadSolutions;
-            });
-            futures.add(future);
-        }
-
-        // Collect all solutions from threads
-        List<int[]> allSolutions = new ArrayList<>();
-        for (Future<List<int[]>> future : futures) {
-            allSolutions.addAll(future.get());
-        }
-
-        executor.shutdown();
         long endTime = System.currentTimeMillis();
         long timeTaken = endTime - startTime;
 
@@ -102,41 +84,6 @@ public class EQService {
         computationRepository.save(result);
 
         return new ComputationResultDTO("THREADED", allSolutions.size(), timeTaken, result.getCreatedAt().toString());
-    }
-
-    /**
-     * Backtracking algorithm to solve N-Queens
-     */
-    private void solveNQueensSequential(int[] board, int row, List<int[]> solutions) {
-        if (row == BOARD_SIZE) {
-            solutions.add(board.clone());
-            return;
-        }
-
-        for (int col = 0; col < BOARD_SIZE; col++) {
-            if (isSafe(board, row, col)) {
-                board[row] = col;
-                solveNQueensSequential(board, row + 1, solutions);
-            }
-        }
-    }
-
-    /**
-     * Check if placing a queen at (row, col) is safe
-     */
-    private boolean isSafe(int[] board, int row, int col) {
-        for (int i = 0; i < row; i++) {
-            int placedCol = board[i];
-            // Check column conflict
-            if (placedCol == col) {
-                return false;
-            }
-            // Check diagonal conflict
-            if (Math.abs(placedCol - col) == Math.abs(i - row)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -179,14 +126,19 @@ public class EQService {
         int[] board = request.getBoard();
         String name = request.getName();
 
+        // Log the submitted board for debugging
+        System.out.println("DEBUG: Submitted board: " + java.util.Arrays.toString(board));
+
         // Validate solution
         if (!isValidSolution(board)) {
+            System.out.println("DEBUG: Board failed isValidSolution check");
             throw new InvalidSolutionException(
                     "Invalid solution: Queens are attacking each other or invalid board configuration");
         }
 
         // Convert board to JSON string
         String boardJson = convertBoardToJson(board);
+        System.out.println("DEBUG: Board JSON: " + boardJson);
 
         // Get time and moves with defaults if null
         int timeTaken = (request.getTimeTakenSeconds() != null) ? request.getTimeTakenSeconds() : 0;
@@ -195,17 +147,34 @@ public class EQService {
         // Calculate score (lower is better: faster time + fewer moves = higher score)
         int score = calculateScore(timeTaken, moves);
 
-        // Check if this is a valid answer (one of the 92 solutions)
-        if (!answerRepository.existsByBoard(boardJson)) {
+        // Check if answers have been computed
+        long totalAnswers = answerRepository.count();
+        System.out.println("DEBUG: Total answers in database: " + totalAnswers);
+        if (totalAnswers == 0) {
             throw new InvalidSolutionException(
-                    "This is not one of the 92 valid solutions. Please run the algorithm first or try a different solution.");
+                    "No solutions have been computed yet! Please run the Sequential or Threaded computation first to generate all 92 solutions.");
+        }
+
+        // Check if this is a valid answer (one of the 92 solutions)
+        boolean exists = answerRepository.existsByBoard(boardJson);
+        System.out.println("DEBUG: Answer exists in database: " + exists);
+        if (!exists) {
+            // Debug: Show first few answers from database
+            List<Answer> sampleAnswers = answerRepository.findAllByOrderBySolutionNumberAsc()
+                    .stream().limit(3).toList();
+            System.out.println("DEBUG: First 3 answers in DB:");
+            for (Answer answer : sampleAnswers) {
+                System.out.println("  - " + answer.getBoard());
+            }
+            throw new InvalidSolutionException(
+                    "This is not one of the 92 valid solutions. Your configuration is valid but doesn't match any computed solution. Try a different arrangement!");
         }
 
         // Check if solution already exists in player submissions
-        boolean exists = gameRepository.existsByBoard(boardJson);
+        boolean alreadyFoundByPlayer = gameRepository.existsByBoard(boardJson);
         long currentFoundSolutions = gameRepository.countDistinctBoards();
 
-        if (exists) {
+        if (alreadyFoundByPlayer) {
             // Solution already found, but still save this player's attempt
             EightQueens game = new EightQueens(name, boardJson, timeTaken, moves, score);
             gameRepository.save(game);
@@ -310,14 +279,21 @@ public class EQService {
         // Clear existing answers to avoid duplicates
         answerRepository.deleteAll();
 
+        System.out.println("DEBUG: Saving " + solutions.size() + " solutions as " + computationType);
+
         // Save new answers with solution numbers
         int solutionNumber = 1;
         for (int[] solution : solutions) {
             String boardJson = convertBoardToJson(solution);
+            if (solutionNumber <= 3) {
+                System.out.println("DEBUG: Saving solution #" + solutionNumber + ": " + boardJson);
+            }
             Answer answer = new Answer(solutionNumber, boardJson, computationType);
             answerRepository.save(answer);
             solutionNumber++;
         }
+
+        System.out.println("DEBUG: Saved all " + (solutionNumber - 1) + " solutions to database");
     }
 
     /**
@@ -360,6 +336,117 @@ public class EQService {
     @Transactional
     public void resetGame() {
         gameRepository.deleteAll();
+    }
+
+    /**
+     * Get solutions as 2D board matrices (8x8) - matches Python's board
+     * representation
+     * This returns each solution as a full 8x8 matrix with 0s and 1s
+     */
+    public List<int[][]> getSolutionsAs2DBoards() {
+        List<Answer> answers = answerRepository.findAllByOrderBySolutionNumberAsc();
+        List<int[][]> boards = new ArrayList<>();
+
+        for (Answer answer : answers) {
+            try {
+                int[] solution = objectMapper.readValue(answer.getBoard(), int[].class);
+                int[][] board = new int[8][8];
+
+                // Convert 1D solution to 2D board matrix
+                for (int row = 0; row < 8; row++) {
+                    for (int col = 0; col < 8; col++) {
+                        board[row][col] = (solution[row] == col) ? 1 : 0;
+                    }
+                }
+                boards.add(board);
+            } catch (Exception e) {
+                // Skip invalid solutions
+            }
+        }
+
+        return boards;
+    }
+
+    /**
+     * Get solutions in Python-compatible format: List<List<Map<"row", "col">>>
+     * Matches Python's solution format: [{'row': 0, 'col': 1}, ...]
+     */
+    public List<List<Map<String, Integer>>> getSolutionsAsPythonFormat() {
+        List<Answer> answers = answerRepository.findAllByOrderBySolutionNumberAsc();
+        List<List<Map<String, Integer>>> pythonFormatSolutions = new ArrayList<>();
+
+        for (Answer answer : answers) {
+            try {
+                int[] solution = objectMapper.readValue(answer.getBoard(), int[].class);
+                List<Map<String, Integer>> positions = new ArrayList<>();
+
+                for (int row = 0; row < solution.length; row++) {
+                    Map<String, Integer> position = new HashMap<>();
+                    position.put("row", row);
+                    position.put("col", solution[row]);
+                    positions.add(position);
+                }
+
+                pythonFormatSolutions.add(positions);
+            } catch (Exception e) {
+                // Skip invalid solutions
+            }
+        }
+
+        return pythonFormatSolutions;
+    }
+
+    /**
+     * Convert a 1D board solution to 2D matrix representation
+     * Used to match Python's board visualization
+     */
+    public int[][] convertTo2DBoard(int[] solution) {
+        int[][] board = new int[8][8];
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                board[row][col] = (solution[row] == col) ? 1 : 0;
+            }
+        }
+        return board;
+    }
+
+    /**
+     * Get all solutions with both formats (1D array, 2D matrix, and position list)
+     * Comprehensive response matching Python behavior
+     */
+    public Map<String, Object> getAllSolutionsAllFormats() {
+        List<Answer> answers = answerRepository.findAllByOrderBySolutionNumberAsc();
+        List<int[]> solutions1D = new ArrayList<>();
+        List<int[][]> solutions2D = new ArrayList<>();
+        List<List<Map<String, Integer>>> solutionsPython = new ArrayList<>();
+
+        for (Answer answer : answers) {
+            try {
+                int[] solution = objectMapper.readValue(answer.getBoard(), int[].class);
+                solutions1D.add(solution);
+                solutions2D.add(convertTo2DBoard(solution));
+
+                // Python format
+                List<Map<String, Integer>> positions = new ArrayList<>();
+                for (int row = 0; row < solution.length; row++) {
+                    Map<String, Integer> position = new HashMap<>();
+                    position.put("row", row);
+                    position.put("col", solution[row]);
+                    positions.add(position);
+                }
+                solutionsPython.add(positions);
+            } catch (Exception e) {
+                // Skip invalid solutions
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("solutions_1d", solutions1D);
+        result.put("solutions_2d", solutions2D);
+        result.put("solutions_python", solutionsPython);
+        result.put("count", solutions1D.size());
+
+        return result;
     }
 
     // Inner class for statistics

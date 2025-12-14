@@ -83,11 +83,14 @@ const EightQueensGame = () => {
     for (let r = 0; r < BOARD_SIZE; r++) {
       if (board[r] === -1) continue;
       
-      // Same column
+      // Same row (queen at row r attacks all cells in that row)
+      if (r === row && board[r] !== col) return true;
+      
+      // Same column (queen at column board[r] attacks all cells in that column)
       if (board[r] === col && r !== row) return true;
       
-      // Diagonal
-      if (Math.abs(r - row) === Math.abs(board[r] - col)) return true;
+      // Diagonal (both diagonals)
+      if (Math.abs(r - row) === Math.abs(board[r] - col) && r !== row) return true;
     }
     return false;
   };
@@ -213,6 +216,13 @@ const EightQueensGame = () => {
   };
 
   const fetchAllAnswers = async () => {
+    // Toggle: if already showing, hide it
+    if (showAnswers) {
+      setShowAnswers(false);
+      setMessage('');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/answers`);
@@ -265,6 +275,10 @@ const EightQueensGame = () => {
       <div className="game-content">
         <div className="board-section">
           <div className="game-stats">
+            <div className="stat-box">
+              <span className="stat-label">Queens:</span>
+              <span className="stat-value">{board.filter(col => col !== -1).length}/8</span>
+            </div>
             <div className="stat-box">
               <span className="stat-label">Time:</span>
               <span className="stat-value">{formatTime(elapsedTime)}</span>
@@ -382,7 +396,7 @@ const EightQueensGame = () => {
                 Compare Results
               </button>
               <button onClick={fetchAllAnswers} disabled={loading} className="btn btn-answers">
-                Show All 92 Solutions
+                {showAnswers ? 'Hide Solutions' : 'Show All 92 Solutions'}
               </button>
             </div>
 
