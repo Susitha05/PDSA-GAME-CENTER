@@ -1,6 +1,9 @@
 // import logo from './logo.svg';
 // import './App.css';
 import {BrowserRouter,Routes,Route} from "react-router-dom";
+import MainPortal from './main_portal';
+import EightQueensGame from './components/EightQueensGame';
+
 import SnakeLadder from './SnakeLadder';
 
 import MainPortal from './main_portal'
@@ -12,6 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPortal />}/>
+          <Route path="/eight-queens" element={<EightQueensGame />}/>
           <Route path="/snake-ladder" element={<SnakeLadder />}/>
             <Route path="/gameDisplay" element={<GameDisplay />}/>
             <Route path="/tspGame" element={<Tsp />}/>
