@@ -17,58 +17,61 @@ public class HanoiGameRound {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false)
+    @Column(name = "round_id", nullable = false)
     private String roundId;
     
-    @Column(nullable = false)
+    @Column(name = "player_name", nullable = false)
+    private String playerName;
+    
+    @Column(name = "disk_count", nullable = false)
     private Integer diskCount;
     
-    @Column(nullable = false)
+    @Column(name = "peg_count", nullable = false)
     private Integer pegCount;
     
-    @Column(nullable = false)
+    @Column(name = "user_move_count", nullable = false)
     private Integer userMoveCount;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "user_moves", nullable = false, columnDefinition = "TEXT")
     private String userMoves;
     
-    @Column(nullable = false)
+    @Column(name = "is_valid", nullable = false)
     private Boolean isValid;
     
-    @Column(nullable = false)
+    @Column(name = "recursive3peg_moves", nullable = false)
     private Integer recursive3PegMoves;
     
-    @Column(nullable = false)
+    @Column(name = "recursive3peg_time_nanos", nullable = false)
     private Long recursive3PegTimeNanos;
     
-    @Column(nullable = false)
+    @Column(name = "iterative3peg_moves", nullable = false)
     private Integer iterative3PegMoves;
     
-    @Column(nullable = false)
+    @Column(name = "iterative3peg_time_nanos", nullable = false)
     private Long iterative3PegTimeNanos;
     
-    @Column(nullable = false)
+    @Column(name = "frame_stewart4peg_moves", nullable = false)
     private Integer frameStewart4PegMoves;
     
-    @Column(nullable = false)
+    @Column(name = "frame_stewart4peg_time_nanos", nullable = false)
     private Long frameStewart4PegTimeNanos;
     
-    @Column(nullable = false)
+    @Column(name = "dynamic4peg_moves", nullable = false)
     private Integer dynamic4PegMoves;
     
-    @Column(nullable = false)
+    @Column(name = "dynamic4peg_time_nanos", nullable = false)
     private Long dynamic4PegTimeNanos;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "recursive3peg_sequence", nullable = false, columnDefinition = "TEXT")
     private String recursive3PegSequence;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "iterative3peg_sequence", nullable = false, columnDefinition = "TEXT")
     private String iterative3PegSequence;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "frame_stewart4peg_sequence", nullable = false, columnDefinition = "TEXT")
     private String frameStewart4PegSequence;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "dynamic4peg_sequence", nullable = false, columnDefinition = "TEXT")
     private String dynamic4PegSequence;
     
     @Column(nullable = false)
@@ -94,6 +97,14 @@ public class HanoiGameRound {
     
     public void setRoundId(String roundId) {
         this.roundId = roundId;
+    }
+    
+    public String getPlayerName() {
+        return playerName;
+    }
+    
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
     
     public Integer getDiskCount() {

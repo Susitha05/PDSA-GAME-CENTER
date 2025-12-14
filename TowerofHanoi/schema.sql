@@ -5,21 +5,39 @@ USE hanoi_game;
 
 -- Table: hanoi_game_rounds
 CREATE TABLE hanoi_game_rounds (
-    round_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    num_disks INT NOT NULL,
-    num_pegs INT NOT NULL,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    round_id VARCHAR(255) NOT NULL UNIQUE,
+    player_name VARCHAR(255) NOT NULL,
+    disk_count INT NOT NULL,
+    peg_count INT NOT NULL,
     user_move_count INT NOT NULL,
-    correct_move_count INT NOT NULL,
-    is_correct BOOLEAN NOT NULL,
-    algorithm_3peg_recursive_time DECIMAL(10, 4),
-    algorithm_3peg_iterative_time DECIMAL(10, 4),
-    algorithm_4peg_framestewart_time DECIMAL(10, 4),
-    algorithm_4peg_dynamic_time DECIMAL(10, 4),
-    user_sequence LONGTEXT,
-    correct_sequence LONGTEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_username (username),
-    INDEX idx_created_at (created_at),
-    INDEX idx_num_disks (num_disks)
+    is_valid BOOLEAN NOT NULL,
+    user_moves TEXT NOT NULL,
+    
+    -- 3-Peg Recursive Algorithm
+    recursive_3peg_moves INT NOT NULL,
+    recursive_3peg_time_nanos BIGINT NOT NULL,
+    recursive_3peg_sequence TEXT NOT NULL,
+    
+    -- 3-Peg Iterative Algorithm
+    iterative_3peg_moves INT NOT NULL,
+    iterative_3peg_time_nanos BIGINT NOT NULL,
+    iterative_3peg_sequence TEXT NOT NULL,
+    
+    -- 4-Peg Frame-Stewart Algorithm
+    frame_stewart_4peg_moves INT NOT NULL,
+    frame_stewart_4peg_time_nanos BIGINT NOT NULL,
+    frame_stewart_4peg_sequence TEXT NOT NULL,
+    
+    -- 4-Peg Dynamic Programming Algorithm
+    dynamic_4peg_moves INT NOT NULL,
+    dynamic_4peg_time_nanos BIGINT NOT NULL,
+    dynamic_4peg_sequence TEXT NOT NULL,
+    
+    timestamp DATETIME NOT NULL,
+    
+    INDEX idx_player_name (player_name),
+    INDEX idx_round_id (round_id),
+    INDEX idx_timestamp (timestamp),
+    INDEX idx_disk_count (disk_count)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

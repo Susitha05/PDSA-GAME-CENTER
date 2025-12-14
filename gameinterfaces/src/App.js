@@ -13,6 +13,7 @@ function App() {
             <Route path="/gameDisplay" element={<GameDisplay />}/>
             <Route path="/tspGame" element={<Tsp />}/>
             <Route path="/towerOfHanoi" element={<TowerOfHanoiBase />}/>
+            
         </Routes>
       </BrowserRouter>
   )
