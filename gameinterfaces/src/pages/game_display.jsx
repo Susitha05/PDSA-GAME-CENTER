@@ -74,7 +74,7 @@ function GameDisplay() {
       thumbnail: '🐍',
       featured: true,
       difficulty_level: 1,
-      status: 'Coming Soon'
+      status: 'Active'
     },
     {
       id: 3,
