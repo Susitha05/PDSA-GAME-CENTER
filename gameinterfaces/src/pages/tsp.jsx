@@ -639,59 +639,91 @@ function TravellingSalesman() {
                         </div>
 
                         {/* Algorithm Results */}
-                        {algorithmResults && (
-                            <div className="bg-gray-100 p-3 rounded mb-4">
-                                <h4 className="font-bold text-lg mb-2">Algorithm Results:</h4>
-                                <div className="text-sm space-y-2">
-                                    <div className="border-b pb-2">
-                                        <p className="font-semibold">1. Nearest Neighbor (Greedy)</p>
-                                        <p>Distance: {algorithmResults.algorithm1Distance} km</p>
-                                        <p>Time: {algorithmResults.algorithm1Time} ms</p>
-                                    </div>
-                                    <div className="border-b pb-2">
-                                        <p className="font-semibold">2. Dynamic Programming</p>
-                                        <p>Distance: {algorithmResults.algorithm2Distance} km</p>
-                                        <p>Time: {algorithmResults.algorithm2Time} ms</p>
-                                    </div>
-                                    <div className="border-b pb-2">
-                                        <p className="font-semibold">3. Genetic Algorithm</p>
-                                        <p>Distance: {algorithmResults.algorithm3Distance} km</p>
-                                        <p>Time: {algorithmResults.algorithm3Time} ms</p>
-                                    </div>
-                                    <div className="bg-green-200 p-2 rounded mt-2">
-                                        <p className="font-bold">Best: {algorithmResults.bestAlgorithm}</p>
-                                        <p>Distance: {algorithmResults.distance} km</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        {/*{algorithmResults && (*/}
+                        {/*    <div className="bg-gray-100 p-3 rounded mb-4">*/}
+                        {/*        <h4 className="font-bold text-lg mb-2">Algorithm Results:</h4>*/}
+                        {/*        <div className="text-sm space-y-2">*/}
+                        {/*            <div className="border-b pb-2">*/}
+                        {/*                <p className="font-semibold">1. Nearest Neighbor (Greedy)</p>*/}
+                        {/*                <p>Distance: {algorithmResults.algorithm1Distance} km</p>*/}
+                        {/*                <p>Time: {algorithmResults.algorithm1Time} ms</p>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="border-b pb-2">*/}
+                        {/*                <p className="font-semibold">2. Dynamic Programming</p>*/}
+                        {/*                <p>Distance: {algorithmResults.algorithm2Distance} km</p>*/}
+                        {/*                <p>Time: {algorithmResults.algorithm2Time} ms</p>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="border-b pb-2">*/}
+                        {/*                <p className="font-semibold">3. Genetic Algorithm</p>*/}
+                        {/*                <p>Distance: {algorithmResults.algorithm3Distance} km</p>*/}
+                        {/*                <p>Time: {algorithmResults.algorithm3Time} ms</p>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="bg-green-200 p-2 rounded mt-2">*/}
+                        {/*                <p className="font-bold">Best: {algorithmResults.bestAlgorithm}</p>*/}
+                        {/*                <p>Distance: {algorithmResults.distance} km</p>*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                     </div>
 
                 </div>
-                <div className="w-4/6 p-2 ">
-                    {gameStarted&&(
-                        <div className="flex ">
+                {gameStarted&&(
+                <div className="w-full p-4 mt-4 bg-gray-100/20 rounded-2xl shadow-xl">
+                        <>
+                        <span className="text-2xl font-bold text-white mb-4">User Score Board</span>
+                            <div className="w-full flex justify-between gap-4">
+                        <div className="flex w-4/6 mt-4">
                             <table className="table-auto border-2 border-gray-300 w-full text-center text-lg">
                                 <thead className="bg-gray-100 border-2">
                                 <th className="border px-2 py-1 font-bold bg-gray-100 text-lg">ID</th>
-                                <th>Name</th>
-                                <th>Score</th>
-                                <th>Total Distence</th>
+                                <th className="border px-2 py-1 font-bold bg-gray-100 text-lg">Name</th>
+                                <th className="border px-2 py-1 font-bold bg-gray-100 text-lg">Score</th>
+                                <th className="border px-2 py-1 font-bold bg-gray-100 text-lg">Total Distence</th>
                                 </thead>
                                 <tbody>
                                 {scoreCard.map((score) => (
-                                    <tr key={score.id}>
-                                        <td>{score.id}</td>
-                                        <td>{score.name}</td>
-                                        <td>{score.accuracyDistance}</td>
-                                        <td>{score.totalDistance}</td>
+                                    <tr key={score.id} className="bg-gray-300/20">
+                                        <td className="border px-2 text-center  text-lg">{score.id}</td>
+                                        <td  className="border px-2 text-center  text-lg">{score.name}</td>
+                                        <td  className="border px-2 text-center  text-lg">{score.accuracyDistance}</td>
+                                        <td  className="border px-2 text-center  text-lg">{score.totalDistance}</td>
                                     </tr>
                                 ))}
                                 </tbody>
                             </table>
                         </div>
-                    )}
+
+                            {algorithmResults && (
+                                <div className="bg-gray-100 p-3 rounded mt-4 w-2/6">
+                                    <h4 className="font-bold text-lg mb-2">Algorithm Results:</h4>
+                                    <div className="text-sm space-y-2">
+                                        <div className="border-b pb-2">
+                                            <p className="font-semibold">1. Nearest Neighbor (Greedy)</p>
+                                            <p>Distance: {algorithmResults.algorithm1Distance} km</p>
+                                            <p>Time: {algorithmResults.algorithm1Time} ms</p>
+                                        </div>
+                                        <div className="border-b pb-2">
+                                            <p className="font-semibold">2. Dynamic Programming</p>
+                                            <p>Distance: {algorithmResults.algorithm2Distance} km</p>
+                                            <p>Time: {algorithmResults.algorithm2Time} ms</p>
+                                        </div>
+                                        <div className="border-b pb-2">
+                                            <p className="font-semibold">3. Genetic Algorithm</p>
+                                            <p>Distance: {algorithmResults.algorithm3Distance} km</p>
+                                            <p>Time: {algorithmResults.algorithm3Time} ms</p>
+                                        </div>
+                                        <div className="bg-green-200 p-2 rounded mt-2">
+                                            <p className="font-bold">Best: {algorithmResults.bestAlgorithm}</p>
+                                            <p>Distance: {algorithmResults.distance} km</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            </div>
+                        </>
                 </div>
+                )}
             </div>
 
             <footer style={{backgroundColor: "#0C2B4E"}}
