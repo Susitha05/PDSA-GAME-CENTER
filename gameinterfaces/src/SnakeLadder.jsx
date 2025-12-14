@@ -1,42 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Board3D from './components/Board3D';
 import ControlPanel from './components/ControlPanel';
-import GuessModal from './components/GuessModal';
 import StatsModal from './components/StatsModal';
 import { startGame, submitGuess, runSimulation, getPath } from './services/api';
 import SimulationReport from './components/SimulationReport';
 
+/**
+ * Snake and Ladder Game - Quiz-Based Puzzle
+ * 
+ * This is NOT a real-time board game. The player's task is to identify
+ * the minimum number of dice throws required to reach the final cell.
+ * 
+ * Game Flow:
+ * 1. SETUP: Player enters name, selects board size, optionally enables "Vs Computer"
+ * 2. GUESSING: Player selects one answer from 3 choices
+ * 3. RESULT: WIN/LOSE/DRAW displayed based on guess correctness
+ * 
+ * Dice Logic (IMPORTANT):
+ * - Dice values {1-6} are simulated ONLY inside algorithms (BFS/Dijkstra)
+ * - No physical dice rolling or randomness during solving
+ * - Algorithms explore all possible dice outcomes as state transitions
+ */
 function SnakeLadder() {
-  const [gameState, setGameState] = useState('SETUP'); // SETUP, GUESSING, PLAYING, FINISHED
+  // Game states: SETUP -> GUESSING -> RESULT
+  const [gameState, setGameState] = useState('SETUP');
   const [boardData, setBoardData] = useState(null);
   const [choices, setChoices] = useState([]);
   const [gameId, setGameId] = useState(null);
 
+  // Player info
   const [playerName, setPlayerName] = useState('');
   const [isVsComputer, setIsVsComputer] = useState(false);
 
-  const [playerPos, setPlayerPos] = useState(1);
-  const [computerPos, setComputerPos] = useState(1);
-  const [currentTurn, setCurrentTurn] = useState('PLAYER'); // 'PLAYER' or 'COMPUTER'
-
-  const [diceVal, setDiceVal] = useState(null);
-  const [message, setMessage] = useState('');
-  const [moves, setMoves] = useState(0);
-  const [showStats, setShowStats] = useState(false);
-  const [rolling, setRolling] = useState(false);
-  const [simulationData, setSimulationData] = useState(null);
-  const [loadingSim, setLoadingSim] = useState(false);
-
-  const [guessedAnswer, setGuessedAnswer] = useState(null);
+  // Result state
+  const [playerGuess, setPlayerGuess] = useState(null);
+  const [aiGuess, setAiGuess] = useState(null);
   const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [gameResult, setGameResult] = useState(null); // 'WIN', 'LOSE', 'DRAW'
 
+  // Path visualization
   const [showPath, setShowPath] = useState(false);
   const [optimalPath, setOptimalPath] = useState([]);
 
+  // UI state
+  const [message, setMessage] = useState('');
+  const [showStats, setShowStats] = useState(false);
+  const [simulationData, setSimulationData] = useState(null);
+  const [loadingSim, setLoadingSim] = useState(false);
   const [gameActive, setGameActive] = useState(false);
 
-  // Audio effects could be added here
-
+  /**
+   * Start a new game round
+   * - Generates random board with N-2 snakes and N-2 ladders
+   * - Computes minimum throws using BFS and Dijkstra
+   * - Records algorithm execution times in database
+   */
   const handleStart = async (n, name, vsComputer) => {
     try {
       const data = await startGame(n);
@@ -47,20 +65,25 @@ function SnakeLadder() {
       setPlayerName(name);
       setIsVsComputer(vsComputer);
 
-      setPlayerPos(1);
-      setComputerPos(1);
-      setMoves(0);
-      setCurrentTurn('PLAYER');
+      // Reset result state
+      setPlayerGuess(null);
+      setAiGuess(null);
+      setCorrectAnswer(null);
+      setGameResult(null);
+      setOptimalPath([]);
+      setShowPath(false);
 
       setGameState('GUESSING');
-      setMessage(`Hi ${name}! Guess the minimum throws to win.`);
-      setDiceVal(null);
+      setMessage(`Hi ${name}! Select the minimum number of dice throws to reach cell ${n * n}.`);
       setGameActive(true);
     } catch (e) {
       setMessage('Error starting game');
     }
   };
 
+  /**
+   * Run 15-round simulation for performance analysis
+   */
   const handleSimulate = async () => {
     setLoadingSim(true);
     try {
@@ -73,21 +96,39 @@ function SnakeLadder() {
     }
   };
 
+  /**
+   * Exit to main menu
+   */
   const handleQuit = () => {
     setGameActive(false);
     setBoardData(null);
     setGameState('SETUP');
   };
 
+  /**
+   * Handle player's guess submission
+   * 
+   * Win/Lose/Draw Logic:
+   * - WIN: Player guesses correctly
+   * - LOSE: Player guesses incorrectly
+   * - DRAW: Player vs AI mode AND both guess the same answer
+   */
   const handleGuess = async (guess) => {
     try {
       const res = await submitGuess(gameId, playerName, guess);
 
-      // Store answers
-      setGuessedAnswer(guess);
+      setPlayerGuess(guess);
       setCorrectAnswer(res.actual);
 
-      // Fetch optimal path
+      // If Vs Computer mode, AI randomly selects from the 3 choices
+      let aiSelectedGuess = null;
+      if (isVsComputer) {
+        const randomIndex = Math.floor(Math.random() * choices.length);
+        aiSelectedGuess = choices[randomIndex];
+        setAiGuess(aiSelectedGuess);
+      }
+
+      // Fetch optimal path for visualization
       try {
         const pathData = await getPath(gameId);
         setOptimalPath(pathData.path || []);
@@ -95,131 +136,49 @@ function SnakeLadder() {
         console.error("Error fetching path", e);
       }
 
-      if (res.correct) {
-        setMessage("Correct! You identified the minimum throws.");
+      // Determine game result
+      let result;
+      if (isVsComputer) {
+        // Vs Computer mode: Check for DRAW first
+        if (guess === aiSelectedGuess) {
+          result = 'DRAW';
+        } else if (guess === res.actual) {
+          result = 'WIN';
+        } else {
+          result = 'LOSE';
+        }
       } else {
-        setMessage(`Wrong! The correct answer was ${res.actual}.`);
+        // Solo mode: Simple WIN/LOSE
+        result = guess === res.actual ? 'WIN' : 'LOSE';
       }
 
-      // Delay slightly before starting game
-      setTimeout(() => {
-        setGameState('PLAYING');
-        setMessage(isVsComputer ? "Your Turn! Roll the dice." : "Roll the dice to move!");
-      }, 1500);
+      setGameResult(result);
+      setGameState('RESULT');
+
+      // Set appropriate message
+      if (result === 'WIN') {
+        setMessage("🎉 Congratulations! You correctly identified the minimum throws!");
+      } else if (result === 'LOSE') {
+        setMessage(`❌ Incorrect! The correct answer was ${res.actual}.`);
+      } else {
+        setMessage("🤝 It's a Draw! Both you and the AI selected the same answer.");
+      }
 
     } catch (e) {
       setMessage('Error submitting guess');
-      setGameState('PLAYING');
-    }
-  };
-
-  const handleRoll = () => {
-    if (gameState !== 'PLAYING' || rolling || (isVsComputer && currentTurn !== 'PLAYER')) return;
-
-    rollDice('PLAYER');
-  };
-
-  const rollDice = (who) => {
-    setRolling(true);
-    // Simulate roll duration
-    setTimeout(() => {
-      const dice = Math.floor(Math.random() * 6) + 1;
-      setDiceVal(dice);
-
-      if (who === 'PLAYER') {
-        setMoves(m => m + 1);
-      }
-
-      setRolling(false);
-      performMove(dice, who);
-    }, 600);
-  };
-
-  // Computer AI Turn
-  useEffect(() => {
-    if (gameState === 'PLAYING' && isVsComputer && currentTurn === 'COMPUTER') {
-      const timer = setTimeout(() => {
-        setMessage("Computer is thinking...");
-        setTimeout(() => {
-          rollDice('COMPUTER');
-        }, 1000);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [gameState, isVsComputer, currentTurn]);
-
-  const performMove = (dice, who) => {
-    let currentPos = who === 'PLAYER' ? playerPos : computerPos;
-    let next = currentPos + dice;
-    const max = boardData.size * boardData.size;
-
-    if (next > max) {
-      next = currentPos; // Don't move if overshot
-    } else {
-      // Handle Snakes and Ladders
-      let moved = true;
-      while (moved) {
-        moved = false;
-        const snake = boardData.snakes.find(s => s.start === next);
-        if (snake) {
-          next = snake.end;
-          moved = false; // Standard rules usually imply one jump, but recursive is fun. Let's stick to one major jump per tile? 
-          // Actually standard recursive logic applies if you land on another.
-          // But let's be safe to avoid infinite loops (though board generation prevents simple ones).
-          // Let's do recursive checks.
-          moved = true; // Check again
-        }
-
-        const ladder = boardData.ladders.find(l => l.start === next);
-        if (ladder) {
-          next = ladder.end;
-          moved = true;
-        }
-        // Safety break for infinite loops (rare but possible in bad gen)
-        if (next === currentPos) moved = false;
-        // If we didn't change position in this iteration, stop.
-        if (snake === undefined && ladder === undefined) moved = false;
-      }
-    }
-
-    if (who === 'PLAYER') {
-      setPlayerPos(next);
-      if (next === max) {
-        finishGame('WIN');
-      } else {
-        if (isVsComputer) {
-          setCurrentTurn('COMPUTER');
-          setMessage("Computer's Turn...");
-        } else {
-          setMessage("Roll again!");
-        }
-      }
-    } else {
-      setComputerPos(next);
-      if (next === max) {
-        finishGame('LOSE');
-      } else {
-        setCurrentTurn('PLAYER');
-        setMessage("Your Turn!");
-      }
-    }
-  };
-
-  const finishGame = (result) => {
-    setGameState('FINISHED');
-    if (result === 'WIN') {
-      setMessage(isVsComputer ? "Congratulations! You Beat the Computer!" : `Finished in ${moves + 1} moves!`);
-    } else {
-      setMessage("Game Over! The Computer Won!");
     }
   };
 
   return (
     <div className="app-container">
+      {/* SETUP Screen - Main Menu */}
       {!gameActive && (
         <div className="menu-view fade-in">
           <div className="game-header">
             <h1>Snake and Ladder</h1>
+            <p style={{ color: '#64748b', marginTop: '10px' }}>
+              Algorithmic Puzzle Game - Guess the Minimum Dice Throws!
+            </p>
           </div>
 
           <ControlPanel
@@ -227,38 +186,28 @@ function SnakeLadder() {
             onStats={() => setShowStats(true)}
             onSimulate={handleSimulate}
             loadingSim={loadingSim}
-            disabled={gameState === 'GUESSING' && gameActive}
+            disabled={false}
           />
         </div>
       )}
 
+      {/* GUESSING & RESULT Screens */}
       {gameActive && (
         <div className="game-view slide-up">
           <div className="game-toolbar">
             <button className="btn-small" onClick={handleQuit}>← Exit to Menu</button>
-            <h3 style={{ margin: 0, color: '#fff' }}>Playing as: {playerName}</h3>
+            <h3 style={{ margin: 0, color: '#fff' }}>Player: {playerName}</h3>
+            {isVsComputer && <span style={{ color: '#fbbf24' }}>🤖 Vs Computer Mode</span>}
           </div>
 
+          {/* Status Panel */}
           <div className="status-panel glass-panel">
-            <span className="status-text">
-              {gameState === 'PLAYING' && isVsComputer && (
-                <>Turn: <span style={{ color: currentTurn === 'PLAYER' ? 'lime' : 'orange' }}>
-                  {currentTurn === 'PLAYER' ? 'YOU' : 'COMPUTER'}
-                </span></>
-              )}
-            </span>
             <span className="status-text" style={{ flex: 1, textAlign: 'center' }}>
               {message}
             </span>
-            <div className="dice-display">
-              {rolling ? '...' : (diceVal || '🎲')}
-            </div>
           </div>
 
-          {gameState === 'GUESSING' && (
-            <GuessModal choices={choices} onGuess={handleGuess} />
-          )}
-
+          {/* Board and Result Display */}
           {boardData && (
             <div style={{ marginTop: '20px', display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'center', width: '100%', maxWidth: '1200px' }}>
 
@@ -270,7 +219,7 @@ function SnakeLadder() {
                 overflowY: 'auto'
               }}>
                 <h4 style={{ margin: '0 0 15px 0', color: 'var(--primary-color)', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
-                  🐍 Snakes
+                  🐍 Snakes ({boardData.snakes.length})
                 </h4>
                 {boardData.snakes.map((s, i) => (
                   <div key={`snake-${i}`} style={{
@@ -287,60 +236,136 @@ function SnakeLadder() {
                 ))}
               </div>
 
-              {/* Center: Board & Controls */}
+              {/* Center: Board & Guess/Results */}
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: '600px' }}>
+                {/* Static Board Visualization */}
                 <Board3D
                   size={boardData.size}
                   snakes={boardData.snakes}
                   ladders={boardData.ladders}
-                  playerPos={playerPos}
-                  computerPos={isVsComputer ? computerPos : null}
+                  playerPos={1}
+                  computerPos={null}
                 />
 
-                {/* Answer Display */}
-                {guessedAnswer !== null && gameState !== 'FINISHED' && (
+                {/* GUESSING Phase - Inline Choices Below Board */}
+                {gameState === 'GUESSING' && (
                   <div style={{
-                    marginTop: '15px',
-                    padding: '12px 24px',
-                    background: 'rgba(255,255,255,0.9)',
-                    borderRadius: '12px',
-                    display: 'flex',
-                    gap: '30px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    marginTop: '25px',
+                    padding: '30px',
+                    background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                    borderRadius: '20px',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                    textAlign: 'center',
+                    maxWidth: '550px',
+                    width: '100%'
                   }}>
-                    <div>
-                      <span style={{ fontWeight: 600, color: '#64748b', fontSize: '0.85rem' }}>Your Guess: </span>
-                      <span style={{
-                        fontWeight: 700,
-                        fontSize: '1.1rem',
-                        color: guessedAnswer === correctAnswer ? '#16a34a' : '#dc2626'
-                      }}>{guessedAnswer}</span>
-                    </div>
-                    <div>
-                      <span style={{ fontWeight: 600, color: '#64748b', fontSize: '0.85rem' }}>Correct Answer: </span>
-                      <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#0284c7' }}>{correctAnswer}</span>
+                    <h3 style={{ margin: '0 0 10px 0', color: '#0f172a', fontSize: '1.4rem' }}>
+                      🎯 Guess the Minimum Dice Throws
+                    </h3>
+                    <p style={{ margin: '0 0 20px 0', color: '#64748b', fontSize: '0.95rem' }}>
+                      Select the minimum throws needed to reach cell {boardData.size * boardData.size}:
+                    </p>
+                    <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                      {choices.map((choice, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleGuess(choice)}
+                          style={{
+                            padding: '20px 40px',
+                            fontSize: '2rem',
+                            fontWeight: '700',
+                            background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '16px',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            boxShadow: '0 4px 16px rgba(2, 132, 199, 0.3)',
+                            minWidth: '100px'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = 'translateY(-4px) scale(1.05)';
+                            e.target.style.boxShadow = '0 12px 24px rgba(2, 132, 199, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = 'translateY(0) scale(1)';
+                            e.target.style.boxShadow = '0 4px 16px rgba(2, 132, 199, 0.3)';
+                          }}
+                        >
+                          {choice}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
 
-                {/* View Path Button & Visualization */}
-                {gameState === 'PLAYING' && (
-                  <div style={{ marginTop: '15px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {/* RESULT Phase - Show Results */}
+                {gameState === 'RESULT' && (
+                  <div style={{
+                    marginTop: '20px',
+                    padding: '30px',
+                    background: 'rgba(255,255,255,0.95)',
+                    borderRadius: '20px',
+                    boxShadow: '0 10px 40px rgba(0,0,0,0.15)',
+                    textAlign: 'center',
+                    maxWidth: '500px',
+                    width: '100%'
+                  }}>
+                    {/* Result Badge */}
+                    <div style={{
+                      fontSize: '3rem',
+                      marginBottom: '20px'
+                    }}>
+                      {gameResult === 'WIN' && '🏆'}
+                      {gameResult === 'LOSE' && '😢'}
+                      {gameResult === 'DRAW' && '🤝'}
+                    </div>
+
+                    <h2 style={{
+                      margin: '0 0 20px 0',
+                      color: gameResult === 'WIN' ? '#16a34a' : gameResult === 'LOSE' ? '#dc2626' : '#f59e0b',
+                      fontSize: '2rem'
+                    }}>
+                      {gameResult === 'WIN' && 'YOU WIN!'}
+                      {gameResult === 'LOSE' && 'YOU LOSE!'}
+                      {gameResult === 'DRAW' && 'DRAW!'}
+                    </h2>
+
+                    {/* Answer Summary */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '20px' }}>
+                      <div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '5px' }}>Your Guess</div>
+                        <div style={{
+                          fontSize: '2rem',
+                          fontWeight: '700',
+                          color: playerGuess === correctAnswer ? '#16a34a' : '#dc2626'
+                        }}>{playerGuess}</div>
+                      </div>
+
+                      <div>
+                        <div style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '5px' }}>Correct Answer</div>
+                        <div style={{
+                          fontSize: '2rem',
+                          fontWeight: '700',
+                          color: '#0284c7'
+                        }}>{correctAnswer}</div>
+                      </div>
+
+                      {isVsComputer && (
+                        <div>
+                          <div style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '5px' }}>AI Guess</div>
+                          <div style={{
+                            fontSize: '2rem',
+                            fontWeight: '700',
+                            color: aiGuess === correctAnswer ? '#16a34a' : '#dc2626'
+                          }}>{aiGuess}</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* View Path Button */}
                     <button
-                      onClick={async () => {
-                        if (optimalPath.length === 0) {
-                          try {
-                            const pathData = await getPath(gameId);
-                            setOptimalPath(pathData.path || []);
-                            setShowPath(true);
-                          } catch (e) {
-                            console.error("Error fetching path", e);
-                            alert("Could not load path. Please try again.");
-                          }
-                        } else {
-                          setShowPath(!showPath);
-                        }
-                      }}
+                      onClick={() => setShowPath(!showPath)}
                       style={{
                         padding: '10px 24px',
                         background: showPath ? '#64748b' : '#0ea5e9',
@@ -350,58 +375,38 @@ function SnakeLadder() {
                         fontSize: '0.95rem',
                         fontWeight: '600',
                         cursor: 'pointer',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        boxShadow: '0 4px 12px rgba(14, 165, 233, 0.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
+                        marginBottom: '15px'
                       }}
                     >
                       {showPath ? '✕ Hide Path' : '🗺️ View Optimal Path'}
                     </button>
 
+                    {/* Optimal Path Visualization */}
                     {showPath && optimalPath.length > 0 && (
                       <div style={{
-                        marginTop: '16px',
-                        padding: '20px',
-                        background: 'rgba(255,255,255,0.95)',
-                        borderRadius: '16px',
-                        maxWidth: '550px',
-                        width: '100%',
-                        boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                        border: '1px solid rgba(255,255,255,0.5)',
-                        animation: 'slideUp 0.3s ease-out'
+                        padding: '15px',
+                        background: '#f8fafc',
+                        borderRadius: '12px',
+                        marginBottom: '20px'
                       }}>
-                        <h4 style={{ margin: '0 0 16px 0', color: '#0f172a', fontSize: '1rem', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+                        <h4 style={{ margin: '0 0 10px 0', fontSize: '0.9rem', color: '#475569' }}>
                           Shortest Path ({optimalPath.length - 1} throws)
                         </h4>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', justifyContent: 'center' }}>
                           {optimalPath.map((step, i) => (
-                            <div key={i} style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '6px'
-                            }}>
+                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                               <span style={{
-                                padding: '6px 14px',
+                                padding: '4px 10px',
                                 background: i === 0 ? '#22c55e' : (i === optimalPath.length - 1 ? '#dc2626' : '#3b82f6'),
                                 color: 'white',
-                                borderRadius: '8px',
-                                fontWeight: '700',
-                                fontSize: '0.9rem',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                borderRadius: '6px',
+                                fontWeight: '600',
+                                fontSize: '0.85rem'
                               }}>
                                 {step.cell}
                               </span>
                               {i < optimalPath.length - 1 && (
-                                <span style={{
-                                  fontSize: '0.8rem',
-                                  color: '#64748b',
-                                  fontWeight: '600',
-                                  background: '#f1f5f9',
-                                  padding: '2px 6px',
-                                  borderRadius: '4px'
-                                }}>
+                                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
                                   🎲{optimalPath[i + 1].diceRoll}→
                                 </span>
                               )}
@@ -410,26 +415,15 @@ function SnakeLadder() {
                         </div>
                       </div>
                     )}
-                  </div>
-                )}
 
-                {gameState === 'PLAYING' && (
-                  <div style={{ marginTop: '20px' }}>
+                    {/* Play Again Button */}
                     <button
                       className="btn-primary"
-                      onClick={handleRoll}
-                      disabled={rolling || (isVsComputer && currentTurn !== 'PLAYER')}
-                      style={{ fontSize: '1.2rem', padding: '15px 60px', opacity: (isVsComputer && currentTurn !== 'PLAYER') ? 0.5 : 1 }}
+                      onClick={handleQuit}
+                      style={{ fontSize: '1.1rem', padding: '15px 40px' }}
                     >
-                      {rolling ? 'Rolling...' : (isVsComputer && currentTurn === 'COMPUTER' ? 'Waiting...' : 'Roll Dice')}
+                      Play Again
                     </button>
-                  </div>
-                )}
-
-                {gameState === 'FINISHED' && (
-                  <div style={{ marginTop: '20px', textAlign: 'center' }}>
-                    <h2 style={{ color: 'var(--primary-color)', fontSize: '2rem' }}>{message}</h2>
-                    <button className="btn-secondary" onClick={handleQuit}>Play Again</button>
                   </div>
                 )}
               </div>
@@ -442,7 +436,7 @@ function SnakeLadder() {
                 overflowY: 'auto'
               }}>
                 <h4 style={{ margin: '0 0 15px 0', color: 'var(--primary-color)', borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>
-                  🪜 Ladders
+                  🪜 Ladders ({boardData.ladders.length})
                 </h4>
                 {boardData.ladders.map((l, i) => (
                   <div key={`ladder-${i}`} style={{

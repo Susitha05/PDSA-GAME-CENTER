@@ -193,6 +193,8 @@ const Board3D = ({ size, snakes, ladders, playerPos, computerPos }) => {
         return arr;
     }, [size]);
 
+    const zoomLevel = 280 / size;
+
     return (
         <div style={{
             width: '100%',
@@ -203,10 +205,11 @@ const Board3D = ({ size, snakes, ladders, playerPos, computerPos }) => {
             boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
         }}>
             <Canvas
+                key={size}
                 orthographic
                 camera={{
                     position: [0, 50, 0],
-                    zoom: 28,
+                    zoom: zoomLevel,
                     near: 0.1,
                     far: 1000,
                     up: [0, 0, -1]

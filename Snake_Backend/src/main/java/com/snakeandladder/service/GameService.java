@@ -35,30 +35,44 @@ public class GameService {
         occupied.add(1);
         occupied.add(totalCells);
 
-        // Requirements: 
+         
         // Set the number of ladders in the board as N-2
         // Set the number of snakes in the board as N-2
         int numSnakes = n - 2; 
         int numLadders = n - 2;
 
-        // Snakes: 3 should be snakeone (drop 1 row)
+        // === Generate Snakes ===
+        // Configuration: We want a specific mix of snake "shapes" to enhance the 3D board aesthetics.
+        // Specifically, we expect 3 "short" snakes that drop exactly 1 row.
+        // These are rendered as simple, tight curves in the 3D view (React Three Fiber).
         int snakeOneCount = 0;
         int maxSnakeOnes = 3;
 
         for (int i = 0; i < numSnakes; i++) {
+            // If we haven't met the quota for 1-row snakes, force the generator to create one.
+            // These short snakes add variety to the procedural 3D generation.
             boolean forceSnakeOne = snakeOneCount < maxSnakeOnes;
+            
             if (createSnake(n, totalCells, occupied, snakes, forceSnakeOne)) {
+                // If we successfully created a forced 1-row snake, count it.
                 if (forceSnakeOne) snakeOneCount++;
             }
         }
 
-        // Ladders: 2 should be ladderup (vertical)
+        // === Generate Ladders ===
+        // Configuration: We want a specific mix of ladder "shapes" for the 3D board.
+        // We expect 2 perfectly vertical ladders.
+        // These are rendered as straight vertical cylinder groups in the 3D view.
         int ladderUpCount = 0;
         int maxLadderUps = 2;
 
         for (int i = 0; i < numLadders; i++) {
+            // If we haven't met the quota for vertical ladders, force the generator to create one.
+            // Vertical ladders look distinct from the slanted/angled ones in 3D.
             boolean forceVertical = ladderUpCount < maxLadderUps;
+            
             if (createLadder(n, totalCells, occupied, ladders, forceVertical)) {
+                // If we successfully created a forced vertical ladder, count it.
                 if (forceVertical) ladderUpCount++;
             }
         }
@@ -81,8 +95,7 @@ public class GameService {
             if (forceOneRow) {
                 endRow = startRow - 1;
             } else {
-                // Random drop, but maybe 3 rows for "snakethree"? 
-                // Let's randomize between 2 and max possible
+            
                 if (startRow < 2) continue;
                 // 50% chance for 3-row drop if possible
                 if (startRow >= 3 && random.nextBoolean()) {
@@ -96,8 +109,7 @@ public class GameService {
 
             // Generate End Col - Randomize direction (Left/Right/Straight)
             int endCol = random.nextInt(n); 
-            // Warning: Diagonal moves might be too far? 
-            // Ideally keep it within reasonable horizontal distance
+        
             
             // Reconstruct End Cell ID
             int end = endRow * n + endCol + 1;
@@ -129,8 +141,7 @@ public class GameService {
                 endCol = startCol;
             } else {
                 endCol = random.nextInt(n);
-                // Try to ensure it leans (not vertical) if not forced, 
-                // but random is fine, just re-roll if vertical?
+                // Ensure not vertical
                 if (endCol == startCol) endCol = (startCol + 1) % n;
             }
 

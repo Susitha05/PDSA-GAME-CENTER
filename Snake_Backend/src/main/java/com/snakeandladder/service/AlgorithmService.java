@@ -41,6 +41,23 @@ public class AlgorithmService {
         return result.minThrows;
     }
     
+    /**
+     * BFS Algorithm to find the minimum number of dice throws.
+     * 
+     * DICE LOGIC (IMPORTANT):
+     * - Dice values {1-6} are simulated MATHEMATICALLY as state transitions
+     * - NO random dice rolling occurs during algorithm execution
+     * - From each cell, we explore ALL 6 possible dice outcomes deterministically
+     * - This models the graph where each cell has edges to cells +1 through +6
+     * 
+     * Graph Model:
+     * - Nodes: Each cell on the board (1 to N²)
+     * - Edges: From cell u, edges go to u+1, u+2, ..., u+6 (if within bounds)
+     * - Snakes/Ladders: Immediate transitions handled after landing
+     * 
+     * @param board The game board with snakes and ladders
+     * @return PathResult containing minimum throws and the optimal path
+     */
     public PathResult bfsWithPath(Board board) {
         int n = board.getTotalCells();
         int[] jumps = getJumps(board, n);
@@ -49,17 +66,18 @@ public class AlgorithmService {
         int[] diceUsed = new int[n + 1];
         Queue<int[]> queue = new LinkedList<>();
         
+        // Start from cell 1 with 0 throws
         visited[1] = true;
         parent[1] = -1;
-        queue.add(new int[]{1, 0}); // cell, dist
+        queue.add(new int[]{1, 0}); // {cell, distance}
 
         while (!queue.isEmpty()) {
             int[] curr = queue.poll();
             int cell = curr[0];
             int dist = curr[1];
 
+            // Reached the final cell - reconstruct the optimal path
             if (cell == n) {
-                // Reconstruct path
                 List<PathStep> path = new ArrayList<>();
                 int current = n;
                 while (parent[current] != -1) {
@@ -70,9 +88,12 @@ public class AlgorithmService {
                 return new PathResult(dist, path);
             }
 
+            // DICE SIMULATION: Try all 6 possible dice values (1 through 6)
+            // This is NOT random - we deterministically explore all outcomes
             for (int dice = 1; dice <= 6; dice++) {
                 int next = cell + dice;
                 if (next <= n) {
+                    // Apply snake/ladder jump if present
                     int actualNext = next;
                     if (jumps[next] != 0) actualNext = jumps[next];
                     
@@ -88,6 +109,22 @@ public class AlgorithmService {
         return new PathResult(-1, new ArrayList<>());
     }
 
+    /**
+     * Dijkstra's Algorithm to find the minimum number of dice throws.
+     * 
+     * DICE LOGIC (IMPORTANT):
+     * - Same as BFS: dice values {1-6} are state transitions, NOT random rolls
+     * - Each "edge" from cell u to cell u+dice has weight 1 (one throw)
+     * - Priority Queue orders by minimum accumulated throws
+     * 
+     * Performance Note:
+     * - Dijkstra is designed for WEIGHTED graphs
+     * - Since all edges have weight=1, BFS is more efficient for this problem
+     * - Included for algorithm comparison and academic analysis
+     * 
+     * @param board The game board with snakes and ladders
+     * @return Minimum number of dice throws to reach the final cell
+     */
     public int dijkstra(Board board) {
         int n = board.getTotalCells();
         int[] jumps = getJumps(board, n);
@@ -107,9 +144,11 @@ public class AlgorithmService {
             if (d > dist[u]) continue;
             if (u == n) return d;
 
+            // DICE SIMULATION: Try all 6 possible dice values deterministically
             for (int dice = 1; dice <= 6; dice++) {
                 int v = u + dice;
                 if (v <= n) {
+                    // Apply snake/ladder jump
                     if (jumps[v] != 0) v = jumps[v];
                     
                     if (dist[u] + 1 < dist[v]) {
