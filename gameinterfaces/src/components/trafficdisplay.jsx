@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import axiosInstance from '../api/axiosConfig';
 import PlayerRegistration from '../components/PlayerRegistration';
 import TrafficNetwork from '../components/TrafficNetwork';
 import GamePlay from '../components/GamePlay';
@@ -44,7 +44,7 @@ const GameDisplay = () => {
       };
       console.log('Request payload:', requestPayload);
       
-      const response = await axios.post('/api/traffic-game/start', requestPayload);
+      const response = await axiosInstance.post('/traffic-game/start', requestPayload);
 
       console.log('=== RESPONSE RECEIVED ===');
       console.log('Full response:', response);
