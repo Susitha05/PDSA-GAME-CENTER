@@ -109,6 +109,13 @@ public class TspController {
 
         return res;
     }
+    @GetMapping("/{name}")
+    public Map<String, Object> getScoresByName(@PathVariable String name) {
+        List<UserScore> scores = userScoreRepository.findByName(name);
+        Map<String, Object> res = new HashMap<>();
+        res.put("scores", scores);
+        return res;
+    }
 
     @PostMapping("/check")
     public Map<String, Object> checkUserPath(@RequestBody Map<String, Object> req) {

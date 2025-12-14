@@ -27,5 +27,7 @@ public interface UserScoreRepository extends JpaRepository<UserScore, Long> {
 
     @Query("SELECT u FROM UserScore u ORDER BY u.algorithm3Time ASC")
     List<UserScore> findBestAlgorithm3Times();
+
+
 }
 

@@ -220,9 +220,74 @@
 //
 // export default TravellingSellsMan;
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import City from "../assets/img/citymap.jpg";
-import { HiPlay, HiRefresh } from "react-icons/hi";
+import {HiPlay, HiRefresh, HiOutlineX, HiOutlineUser, HiOutlineUserCircle,HiOutlineInformationCircle} from "react-icons/hi";
+
+
+const NameDialog = ({open, onClose, onSubmit}) => {
+    const [userName, setUserName] = useState('');
+
+    if (!open) return null;
+
+    const handleSubmit = () => {
+        if (userName.trim()) {
+            onSubmit(userName);
+            onClose();
+        } else {
+            alert('Please enter your name!');
+        }
+    };
+
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+            <div className="bg-white rounded-lg p-6 shadow-xl max-w-md w-full">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold">Enter Your Name</h2>
+                    <button
+                        className="text-gray-500 hover:text-gray-700"
+                        onClick={onClose}
+                    >
+                        <HiOutlineX className="w-6 h-6"/>
+                    </button>
+                </div>
+
+                <div className="mb-4">
+                    <label className="text-lg font-semibold block mb-2">Player Name:</label>
+                    <input
+                        type="text"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        className="border-2 border-gray-300 rounded px-3 py-2 w-full"
+                        placeholder="Enter your name"
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSubmit();
+                            }
+                        }}
+                        autoFocus
+                    />
+                </div>
+
+                <div className="flex gap-2">
+                    <button
+                        onClick={handleSubmit}
+                        className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                        Continue
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 function TravellingSalesman() {
     const [dots, setDots] = useState([]);
@@ -235,6 +300,8 @@ function TravellingSalesman() {
     const [userName, setUserName] = useState('');
     const [algorithmResults, setAlgorithmResults] = useState(null);
     const [gameStarted, setGameStarted] = useState(false);
+    const [namebox, setnamebox] = useState(false)
+    const [scoreCard, setscoreCard] = useState([])
     const cityNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     // Load new game
@@ -255,6 +322,25 @@ function TravellingSalesman() {
     useEffect(() => {
         loadNewGame();
     }, []);
+    useEffect(() => {
+        if (!userName) setnamebox(true)
+    }, [])
+
+    useEffect(() => {
+        if (!userName) return;
+
+        const fetchScores = async () => {
+            try {
+                const res = await fetch(`http://localhost:8081/tsp/${userName}`);
+                const data = await res.json();
+                setscoreCard(data.scores);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        fetchScores();
+    }, [userName]);
 
     // Toggle city selection
     const toggleCitySelection = (index) => {
@@ -293,7 +379,7 @@ function TravellingSalesman() {
 
         const res = await fetch("http://localhost:8081/tsp/solve", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 cities: selectedCityData,
                 selectedIndices: selectedCities,
@@ -307,9 +393,11 @@ function TravellingSalesman() {
         // Map path indices back to original dot indices
         const orderedDots = data.shortestPath.map(i => selectedCityData[i]);
         setPath(orderedDots);
-        setTotalDistance(data.distance.toFixed(2));
+        setTotalDistance(data.distance);
     };
-
+    const handleNameSubmit = (name) => {
+        setUserName(name);
+    };
     // Handle user clicking a dot
     const handleUserClick = async (i) => {
         if (isCompleted || !gameStarted) return;
@@ -338,7 +426,7 @@ function TravellingSalesman() {
 
                 const res = await fetch("http://localhost:8081/tsp/check", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
                         dots: selectedCityData,
                         userPath: mappedUserPath,
@@ -370,28 +458,19 @@ function TravellingSalesman() {
 
     return (
         <>
-            <div className="w-full bg-green-950 p-4">
-                <label className="ml-2 capitalize text-white text-3xl">Traveling Salesman Problem</label>
+            <div style={{backgroundColor: "#0C2B4E"}} className="flex w-full p-4 justify-between border-b-[0.5px] border-gray-100/50">
+                <label className="ml-2 capitalize text-white text-3xl font-semibold">Traveling Salesman Problem</label>
+                <span className="flex items-center text-xl gap-2 text-white mr-2">
+                    <HiOutlineUserCircle className="w-8 h-8"/>
+                    <label className="font-semibold">Player Name: {!userName ? "player 1" : userName}</label>
+                </span>
             </div>
 
-            <div className="w-full p-4">
-                {/* User Name Input */}
-                <div className="mb-4">
-                    <label className="text-lg font-semibold mr-2">Player Name:</label>
-                    <input
-                        type="text"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        className="border-2 border-gray-300 rounded px-3 py-1"
-                        placeholder="Enter your name"
-                        disabled={gameStarted}
-                    />
-                </div>
-
+            <div style={{backgroundColor: "#0C2B4E"}} className=" w-screen h-full pb-10 p-4">
                 {/* City Selection */}
                 {!gameStarted && (
-                    <div className="mb-4 p-4 bg-blue-50 rounded">
-                        <h3 className="text-xl font-bold mb-2">Select Cities to Visit:</h3>
+                    <div className="mb-4 p-2 bg-blue-50/20 rounded-lg shadow-2xl ">
+                        <h3 style={{color: "#F4F4F4"}} className="text-xl font-bold mb-2">Select Cities to Visit:</h3>
                         <div className="flex flex-wrap gap-2 mb-3">
                             {dots.map((_, i) => (
                                 <button
@@ -409,23 +488,23 @@ function TravellingSalesman() {
                                     City {cityNames[i]} {i === homeCityIndex ? '(HOME)' : ''}
                                 </button>
                             ))}
+                            <button
+                                onClick={startGame}
+                                className="ml-4 bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700"
+                            >
+                                Start Game
+                            </button>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">
+                        <p className="text-base font-semibold text-amber-700 mb-2">
                             Selected: {selectedCities.length} cities (minimum 2 required)
                         </p>
-                        <button
-                            onClick={startGame}
-                            className="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700"
-                        >
-                            Start Game
-                        </button>
                     </div>
                 )}
 
                 <div className="flex w-full gap-4">
                     {/* Map */}
-                    <div className="relative w-2/3" style={{ height: '600px' }}>
-                        <img src={City} alt="map" className="w-full h-full object-cover rounded" />
+                    <div className="relative w-2/3" style={{height: '600px'}}>
+                        <img src={City} alt="map" className="w-full h-full object-cover rounded"/>
 
                         {dots.map((dot, i) => {
                             const isHome = i === homeCityIndex;
@@ -495,12 +574,55 @@ function TravellingSalesman() {
                     </div>
 
                     {/* Side Panel */}
-                    <div className="w-1/3">
-                        <h3 className="font-bold text-2xl text-amber-600 mb-3">Controls</h3>
+                    <div className="w-1/3 bg-white/20 rounded-2xl shadow-2xl p-2">
+                        <div>
 
-                        <div className="flex flex-col gap-3 mb-4">
+                        </div>
+
+                        {gameStarted && selectedCities.length > 0 ?(
+                            <div className="overflow-auto" style={{  MaxHeight: '500px'}}>
+                                <span className="flex w-full justify-center"><h4 className="font-bold text-white text-lg mb-2">Selected Cities Distances (km):</h4></span>
+                                <table className="table-auto text-lg border-collapse border border-gray-400">
+                                    <thead>
+                                    <tr>
+                                        <th className="border  bg-gray-200 text-lg">From\To</th>
+                                        {selectedCities.map((idx) => (
+                                            <th key={idx} className="border px-2 bg-gray-200 text-lg">
+                                                {cityNames[idx]}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {selectedCities.map((fromIdx) => (
+                                        <tr key={fromIdx}>
+                                            <td className="border px-2 py-1 font-bold bg-gray-100  text-lg">
+                                                {cityNames[fromIdx]}
+                                            </td>
+                                            {selectedCities.map((toIdx) => (
+                                                <td key={toIdx} className="border px-2 text-center  text-lg">
+                                                    {fromIdx === toIdx ? '-' : calculateDistance(dots[fromIdx], dots[toIdx])}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ):(
+                            <div className="flex justify-center">
+                                <div className="flex justify-center mt-2 w-[550px] h-[400px] rounded-2xl shadow-2xl shadow-black/50 bg-gray-100/20">
+                                    <span className="flex flex-col justify-center items-center text-lg">
+                                        <HiOutlineInformationCircle className="w-10 h-10 text-red-900"/>
+                                        <label className="font-semibold text-red-900">Start Game to Procced </label>
+                                    </span>
+                                </div>
+
+                            </div>
+                        )}
+                        <div className="flex flex-col gap-3 mt-4 mb-4">
                             <button
-                                className="flex items-center justify-center bg-green-700 p-3 rounded-lg gap-2 shadow-lg text-white hover:bg-green-800 disabled:bg-gray-400"
+                                className="flex items-center shadow-2xl justify-center bg-green-700 p-3 rounded-lg gap-2 text-white hover:bg-green-800 disabled:bg-gray-400"
                                 onClick={solveTSP}
                                 disabled={!gameStarted}
                             >
@@ -508,7 +630,7 @@ function TravellingSalesman() {
                                 <label className="text-xl font-semibold">Solve with All Algorithms</label>
                             </button>
                             <button
-                                className="flex items-center justify-center bg-amber-700 p-3 rounded-lg gap-2 shadow-lg text-white hover:bg-amber-800"
+                                className="flex items-center justify-center bg-amber-700 p-3 rounded-lg gap-2 shadow-2xl text-white hover:bg-amber-800"
                                 onClick={loadNewGame}
                             >
                                 <HiRefresh className="w-8 h-8"/>
@@ -523,68 +645,67 @@ function TravellingSalesman() {
                                 <div className="text-sm space-y-2">
                                     <div className="border-b pb-2">
                                         <p className="font-semibold">1. Nearest Neighbor (Greedy)</p>
-                                        <p>Distance: {algorithmResults.algorithm1Distance.toFixed(2)} km</p>
-                                        <p>Time: {algorithmResults.algorithm1Time.toFixed(3)} ms</p>
+                                        <p>Distance: {algorithmResults.algorithm1Distance} km</p>
+                                        <p>Time: {algorithmResults.algorithm1Time} ms</p>
                                     </div>
                                     <div className="border-b pb-2">
                                         <p className="font-semibold">2. Dynamic Programming</p>
-                                        <p>Distance: {algorithmResults.algorithm2Distance.toFixed(2)} km</p>
-                                        <p>Time: {algorithmResults.algorithm2Time.toFixed(3)} ms</p>
+                                        <p>Distance: {algorithmResults.algorithm2Distance} km</p>
+                                        <p>Time: {algorithmResults.algorithm2Time} ms</p>
                                     </div>
                                     <div className="border-b pb-2">
                                         <p className="font-semibold">3. Genetic Algorithm</p>
-                                        <p>Distance: {algorithmResults.algorithm3Distance.toFixed(2)} km</p>
-                                        <p>Time: {algorithmResults.algorithm3Time.toFixed(3)} ms</p>
+                                        <p>Distance: {algorithmResults.algorithm3Distance} km</p>
+                                        <p>Time: {algorithmResults.algorithm3Time} ms</p>
                                     </div>
                                     <div className="bg-green-200 p-2 rounded mt-2">
                                         <p className="font-bold">Best: {algorithmResults.bestAlgorithm}</p>
-                                        <p>Distance: {algorithmResults.distance.toFixed(2)} km</p>
+                                        <p>Distance: {algorithmResults.distance} km</p>
                                     </div>
                                 </div>
                             </div>
                         )}
-
-                        {/* Distance Table */}
-                        {gameStarted && selectedCities.length > 0 && (
-                            <div className="overflow-auto" style={{ maxHeight: '300px' }}>
-                                <h4 className="font-bold text-lg mb-2">Selected Cities Distances (km):</h4>
-                                <table className="table-auto text-sm border-collapse border border-gray-400">
-                                    <thead>
-                                    <tr>
-                                        <th className="border px-2 bg-gray-200">From\To</th>
-                                        {selectedCities.map((idx) => (
-                                            <th key={idx} className="border px-2 bg-gray-200">
-                                                {cityNames[idx]}
-                                            </th>
-                                        ))}
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {selectedCities.map((fromIdx) => (
-                                        <tr key={fromIdx}>
-                                            <td className="border px-2 py-1 font-bold bg-gray-100">
-                                                {cityNames[fromIdx]}
-                                            </td>
-                                            {selectedCities.map((toIdx) => (
-                                                <td key={toIdx} className="border px-2 text-center">
-                                                    {fromIdx === toIdx ? '-' : calculateDistance(dots[fromIdx], dots[toIdx])}
-                                                </td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
                     </div>
+
+                </div>
+                <div className="w-4/6 p-2 ">
+                    {gameStarted&&(
+                        <div className="flex ">
+                            <table className="table-auto border-2 border-gray-300 w-full text-center text-lg">
+                                <thead className="bg-gray-100 border-2">
+                                <th className="border px-2 py-1 font-bold bg-gray-100 text-lg">ID</th>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Total Distence</th>
+                                </thead>
+                                <tbody>
+                                {scoreCard.map((score) => (
+                                    <tr key={score.id}>
+                                        <td>{score.id}</td>
+                                        <td>{score.name}</td>
+                                        <td>{score.accuracyDistance}</td>
+                                        <td>{score.totalDistance}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            <footer className="fixed bottom-0 left-0 w-full bg-green-950 p-2 text-center text-white">
+            <footer style={{backgroundColor: "#0C2B4E"}}
+                    className="fixed bottom-0 left-0 w-full p-2 text-center border-t-[0.5px] border-gray-100/20 text-white">
                 © 2025 Game World - Traveling Salesman Problem
             </footer>
+            <NameDialog
+                open={namebox}
+                onClose={() => setnamebox(false)}
+                onSubmit={handleNameSubmit}
+            />
         </>
     );
 }
 
 export default TravellingSalesman;
+
