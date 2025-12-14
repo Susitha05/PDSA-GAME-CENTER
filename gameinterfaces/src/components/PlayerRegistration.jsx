@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaGamepad } from 'react-icons/fa';
-import axios from 'axios';
+import axiosInstance from '../api/axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 const PlayerRegistration = ({ onPlayerRegistered, onLoading }) => {
   const [playerName, setPlayerName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // Default handlers if props are not provided
+  const handlePlayerRegistered = onPlayerRegistered || ((player) => {
+    console.log('Player registered:', player);
+    // Navigate to game play page after successful registration
+    setTimeout(() => navigate('/trafficDisplay'), 500);
+  });
+
+  const handleLoading = onLoading || ((isLoading) => {
+    console.log('Loading state:', isLoading);
+  });
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -29,10 +42,10 @@ const PlayerRegistration = ({ onPlayerRegistered, onLoading }) => {
 
     try {
       setLoading(true);
-      onLoading(true);
+      handleLoading(true);
 
       console.log('Registering player:', playerName.trim());
-      const response = await axios.post('/api/traffic-game/register', {
+      const response = await axiosInstance.post('/traffic-game/register', {
         playerName: playerName.trim()
       });
 
@@ -41,7 +54,7 @@ const PlayerRegistration = ({ onPlayerRegistered, onLoading }) => {
       if (response.data && response.data.success === true) {
         const player = response.data.data;
         console.log('Player registered successfully:', player);
-        onPlayerRegistered(player);
+        handlePlayerRegistered(player);
         setPlayerName('');
       } else {
         console.log('Registration failed - success flag not true:', response.data);
@@ -54,7 +67,7 @@ const PlayerRegistration = ({ onPlayerRegistered, onLoading }) => {
       setError(err.response?.data?.message || err.message || 'Error registering player. Please try again.');
     } finally {
       setLoading(false);
-      onLoading(false);
+      handleLoading(false);
     }
   };
 

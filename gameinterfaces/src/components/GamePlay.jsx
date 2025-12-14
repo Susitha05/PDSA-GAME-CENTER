@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaCheckCircle } from 'react-icons/fa';
-import axios from 'axios';
+import axiosInstance from '../api/axiosConfig';
 
 const GamePlay = ({ roundId, roadCapacities, playerName, onGameResult, onLoading }) => {
   const [playerAnswer, setPlayerAnswer] = useState('');
@@ -34,7 +34,7 @@ const GamePlay = ({ roundId, roadCapacities, playerName, onGameResult, onLoading
         capacity: road.capacity
       }));
 
-      const response = await axios.post('/api/traffic-game/submit', {
+      const response = await axiosInstance.post('/traffic-game/submit', {
         roundId: roundId,
         playerAnswer: answer,
         graphData: graphData

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaTrophy, FaUsers } from 'react-icons/fa';
-import axios from 'axios';
+import axiosInstance from '../api/axiosConfig';
 
 const Leaderboard = ({ onLoading }) => {
   const [leaderboard, setLeaderboard] = useState([]);
@@ -15,7 +15,7 @@ const Leaderboard = ({ onLoading }) => {
   const fetchLeaderboard = async () => {
     try {
       onLoading(true);
-      const response = await axios.get('/api/traffic-game/leaderboard');
+      const response = await axiosInstance.get('/traffic-game/leaderboard');
 
       if (response.data.success) {
         setLeaderboard(response.data.data);

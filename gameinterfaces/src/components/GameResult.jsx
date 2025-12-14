@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosConfig';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaTimesCircle, FaTrophy } from 'react-icons/fa';
 
