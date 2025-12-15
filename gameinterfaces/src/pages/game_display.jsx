@@ -114,7 +114,7 @@ function GameDisplay() {
       thumbnail: '♛',
       featured: true,
       difficulty_level: 4,
-      status: 'Coming Soon'
+      status: 'Active'
     },
     {
       id: 5,
