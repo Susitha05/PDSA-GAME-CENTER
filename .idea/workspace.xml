@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e784699-6857-4b55-8bd4-e1a790fe2688" name="Changes" comment="" />
+    <list default="true" id="74a49512-f037-4b3a-bc4c-d3f2d697ef68" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/src/pages/game_display.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/pages/game_display.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,94 +23,176 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JSX File" />
+        <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="36OCzAgrhm9lWYD5o6fYhjjipnX" />
+  <component name="ProjectId" id="36nEUbUCvC7vDHQHPiaYNYTkzKP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JavaScript Debug.Debug Application.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
-    &quot;Node.js.MainPotral.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Documents/GitHub/PDSA-GAME-CENTER/gameinterfaces/src/assets/img&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\IntelliJ IDEA 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JavaScript Debug.Debug Application.executor": "Run",
-    "Maven. [clean].executor": "Run",
-    "Node.js.App.js.executor": "Run",
-    "Node.js.MainPotral.jsx.executor": "Run",
+    "Application.SnakeLadderApplication.executor": "Run",
+    "JUnit.TspServiceTest$IndividualAlgorithmTimes.executor": "Run",
+    "JUnit.TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime.executor": "Run",
+    "JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds.executor": "Run",
+    "JUnit.TspServiceTest$StatisticalAnalysis.executor": "Run",
+    "JUnit.TspServiceTest.executionTimeFor15Rounds.executor": "Run",
+    "JUnit.TspServiceTest.executor": "Run",
+    "Maven.tsp [clean].executor": "Run",
+    "Node.js.tsp.jsx.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.EightQueensApplication.executor": "Run",
+    "Spring Boot.SnakeLadderApplication.executor": "Run",
+    "Spring Boot.TowerofHanoiApplication.executor": "Run",
+    "Spring Boot.TrafficSimulationApplication.executor": "Run",
     "Spring Boot.TspApplication.executor": "Run",
-    "Spring Boot.Unnamed.executor": "Run",
-    "Spring Boot.main.executor": "Debug",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "TSP",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Admin/Documents/GitHub/PDSA-GAME-CENTER/tsp",
     "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propCompiler",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
     "ts.external.directory.path": "D:\\IntelliJ IDEA 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
-</component>
+  }
+}]]></component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Admin\Documents\GitHub\PDSA-GAME-CENTER\gameinterfaces\src\assets\img" />
-      <recent name="C:\Users\Admin\Documents\GitHub\PDSA-GAME-CENTER" />
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.example.tsp.service" />
     </key>
   </component>
-  <component name="RunAnythingCache">
-    <option name="myCommands">
-      <command value="mvn clean" />
-    </option>
-  </component>
-  <component name="RunDashboard">
-    <option name="configurationTypes">
-      <set>
-        <option value="Application" />
-      </set>
-    </option>
-  </component>
   <component name="RunManager" selected="Spring Boot.TspApplication">
-    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
-      <method v="2" />
+    <configuration name="SnakeLadderApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.snakeandladder.SnakeLadderApplication" />
+      <module name="backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.snakeandladder.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$IndividualAlgorithmTimes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$IndividualAlgorithmTimes" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$StatisticalAnalysis" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$StatisticalAnalysis" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$StatisticalAnalysis" />
+      <option name="METHOD_NAME" value="executionTimeFor15Rounds" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest.executionTimeFor15Rounds" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="METHOD_NAME" value="executionTimeFor15Rounds" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EightQueensApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Eight-Queens" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.PDSA.Eight_Queens.EightQueensApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SnakeLadderApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.snakeandladder.SnakeLadderApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TowerofHanoiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="TowerofHanoi" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.TowerofHanoi.TowerofHanoiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TrafficSimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Traffic-Simulation" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.PDSA.Traffic_Simulation.TrafficSimulationApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="TspApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tsp" />
@@ -109,6 +201,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.SnakeLadderApplication" />
+        <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis" />
+        <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds" />
+        <item itemvalue="JUnit.TspServiceTest.executionTimeFor15Rounds" />
+        <item itemvalue="JUnit.TspServiceTest$IndividualAlgorithmTimes" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -121,42 +222,29 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1e784699-6857-4b55-8bd4-e1a790fe2688" name="Changes" comment="" />
-      <created>1764868492131</created>
+      <changelist id="74a49512-f037-4b3a-bc4c-d3f2d697ef68" name="Changes" comment="" />
+      <created>1765633953023</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1764868492131</updated>
-      <workItem from="1764868494220" duration="5000" />
-      <workItem from="1764907703456" duration="2890000" />
-      <workItem from="1764940082513" duration="1800000" />
-      <workItem from="1764946208951" duration="720000" />
-      <workItem from="1765084465661" duration="3059000" />
-      <workItem from="1765112411710" duration="5963000" />
-      <workItem from="1765162095323" duration="2146000" />
-      <workItem from="1765188771588" duration="1556000" />
-      <workItem from="1765194453507" duration="1770000" />
-      <workItem from="1765202068855" duration="6188000" />
-      <workItem from="1765292491246" duration="606000" />
-      <workItem from="1765335166606" duration="3381000" />
-      <workItem from="1765389109419" duration="655000" />
-      <workItem from="1765425429371" duration="14932000" />
-      <workItem from="1765521214499" duration="599000" />
-      <workItem from="1765522348486" duration="3605000" />
-      <workItem from="1765526457274" duration="71000" />
-      <workItem from="1765526537629" duration="508000" />
-      <workItem from="1765527265216" duration="8000" />
-      <workItem from="1765553804148" duration="14000" />
-      <workItem from="1765553831935" duration="1248000" />
-      <workItem from="1765592354412" duration="123000" />
-      <workItem from="1765592668809" duration="1204000" />
-      <workItem from="1765596246234" duration="403000" />
-      <workItem from="1765596715517" duration="43000" />
-      <workItem from="1765596784972" duration="100000" />
-      <workItem from="1765596894199" duration="719000" />
+      <updated>1765633953023</updated>
+      <workItem from="1765633955678" duration="2262000" />
+      <workItem from="1765652009115" duration="38192000" />
+      <workItem from="1765787443314" duration="16880000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
