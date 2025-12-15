@@ -216,14 +216,16 @@ const TowerOfHanoiBase = () => {
     setCurrentMoves(currentMoves + 1);
     
     const move = `${draggedFrom} → ${toPeg}`;
-    setMoveLog([...moveLog, move]);
+    const updatedMoveLog = [...moveLog, move];
+    setMoveLog(updatedMoveLog);
 
     const destinationPeg = pegs === 3 ? 'C' : 'D';
     if (newTowers[destinationPeg].length === disks) {
       console.log('Puzzle solved!');
-      setTimeout(() => {
-        handleSubmitSolution();
-      }, 100);
+      console.log('Total moves including this one:', updatedMoveLog.length);
+      // Don't auto-submit - let user click Submit button
+      setError('Congratulations! Puzzle solved! Click "Submit Solution" to save your score.');
+      setTimeout(() => setError(''), 5000);
     }
 
     setDraggedDisk(null);
@@ -247,6 +249,8 @@ const TowerOfHanoiBase = () => {
     setLoading(true);
     
     try {
+      console.log('Submitting moves:', moveLog);
+      console.log('Move log sample:', moveLog.slice(0, 3));
       const response = await hanoiApi.submitSolution(roundId, playerName, disks, pegs, moveLog);
       console.log('Submit solution response:', response);
       setAlgorithmResults(response.algorithmResults);
