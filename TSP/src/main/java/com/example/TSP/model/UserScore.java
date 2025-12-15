@@ -5,39 +5,27 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user_scores")
 public class UserScore {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
     @Column(name = "home_city")
     private String homeCity;
-
     @Column(length = 1000, name = "selected_cities")
-    private String selectedCities; // JSON string of selected city indices
-
+    private String selectedCities;
     @Column(length = 1000, name = "shortest_route")
-    private String shortestRoute; // JSON string of shortest path
-
+    private String shortestRoute;
     @Column(name = "total_distance")
     private double totalDistance;
-
     @Column(name = "correct_dots")
     private int correctDots;
-
     @Column(name = "accuracy_percentage")
     private double accuracyPercentage;
-
-    // Algorithm execution times in milliseconds
     @Column(name = "algorithm1_time")
     private long algorithm1Time;
-
     @Column(name = "algorithm2_time")
     private long algorithm2Time;
-
     @Column(name = "algorithm3_time")
     private long algorithm3Time;
 

@@ -32,6 +32,7 @@ public class TspController {
 
         // Generate 8-10 random cities with coordinates
         int numCities = 8 + random.nextInt(3); // 8-10 cities
+
         for (int i = 0; i < numCities; i++) {
             points.add(new city(random.nextDouble() * 80 + 10, random.nextDouble() * 80 + 10));
         }

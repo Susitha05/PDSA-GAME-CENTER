@@ -5,40 +5,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Service class implementing three different algorithms to solve the Traveling Salesman Problem (TSP)
- *
- * Algorithm 1: Nearest Neighbor (Greedy) - O(n²) time complexity
- * Algorithm 2: Dynamic Programming (Held-Karp) - O(n²·2^n) time complexity
- * Algorithm 3: Genetic Algorithm - O(generations × population × n) time complexity
- */
 @Service
 public class TspService {
 
-    /**
-     * Algorithm 1: Nearest Neighbor (Greedy Approach)
-     *
-     * Time Complexity: O(n²)
-     * Space Complexity: O(n)
-     *
-     * Description:
-     * - Starts from the given city (usually home city)
-     * - At each step, moves to the nearest unvisited city
-     * - Continues until all cities are visited
-     *
-     * Advantages:
-     * - Very fast execution
-     * - Simple to implement
-     * - Works well for large datasets
-     *
-     * Disadvantages:
-     * - Does not guarantee optimal solution
-     * - Typically produces paths 25% longer than optimal
-     *
-     * @param cities List of cities to visit
-     * @param startIndex Index of starting city (home city)
-     * @return List of city indices representing the path order
-     */
+
     public List<Integer> nearestNeighbor(List<city> cities, int startIndex) {
         int n = cities.size();
         boolean[] visited = new boolean[n];
@@ -74,41 +44,13 @@ public class TspService {
         return order;
     }
 
-    /**
-     * Algorithm 2: Dynamic Programming (Held-Karp Algorithm)
-     *
-     * Time Complexity: O(n² × 2^n)
-     * Space Complexity: O(n × 2^n)
-     *
-     * Description:
-     * - Uses bitmask to represent sets of visited cities
-     * - Computes optimal subpaths and combines them
-     * - Guarantees finding the optimal solution
-     *
-     * Advantages:
-     * - Finds guaranteed optimal solution
-     * - More efficient than brute force O(n!)
-     *
-     * Disadvantages:
-     * - Exponential time and space complexity
-     * - Only practical for small n (typically n ≤ 15)
-     * - High memory usage
-     *
-     * Note: Falls back to Nearest Neighbor for n > 12 to prevent performance issues
-     *
-     * @param cities List of cities to visit
-     * @param startIndex Index of starting city
-     * @return List of city indices representing optimal path
-     */
     public List<Integer> dynamicProgramming(List<city> cities, int startIndex) {
         int n = cities.size();
 
-        // For larger sets, fall back to nearest neighbor to prevent exponential explosion
         if (n > 12) {
             return nearestNeighbor(cities, startIndex);
         }
 
-        // Build distance matrix
         double[][] dist = new double[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -118,13 +60,13 @@ public class TspService {
 
         int fullMask = (1 << n) - 1;
 
-        // dp[mask][i] = minimum distance to visit all cities in mask, ending at city i
+
         double[][] dp = new double[1 << n][n];
 
-        // parent[mask][i] = previous city in optimal path to reach state (mask, i)
+
         int[][] parent = new int[1 << n][n];
 
-        // Initialize DP table with infinity
+
         for (double[] row : dp) {
             Arrays.fill(row, Double.MAX_VALUE);
         }
@@ -182,40 +124,8 @@ public class TspService {
         return path;
     }
 
-    /**
-     * Algorithm 3: Genetic Algorithm
-     *
-     * Time Complexity: O(G × P × n) where G = generations, P = population size
-     * Space Complexity: O(P × n)
-     *
-     * Description:
-     * - Mimics natural evolution to find near-optimal solutions
-     * - Maintains population of candidate solutions
-     * - Uses selection, crossover, and mutation to evolve solutions
-     *
-     * Process:
-     * 1. Initialize random population of tours
-     * 2. Evaluate fitness (inverse of distance)
-     * 3. Select parents using tournament selection
-     * 4. Create offspring through crossover
-     * 5. Apply mutation to maintain diversity
-     * 6. Replace population with new generation
-     * 7. Repeat for multiple generations
-     *
-     * Advantages:
-     * - Scales well to larger problems
-     * - Often finds near-optimal solutions
-     * - Avoids getting stuck in local optima
-     *
-     * Disadvantages:
-     * - Non-deterministic (results may vary)
-     * - Slower than greedy for small datasets
-     * - Requires parameter tuning
-     *
-     * @param cities List of cities to visit
-     * @param startIndex Index of starting city (must be first in path)
-     * @return List of city indices representing near-optimal path
-     */
+
+
     public List<Integer> geneticAlgorithm(List<city> cities, int startIndex) {
         int n = cities.size();
 
@@ -239,29 +149,25 @@ public class TspService {
                 }
             }
 
-            // Shuffle to create random tour
             Collections.shuffle(individual, random);
-
-            // Add start city at beginning
             individual.add(0, startIndex);
 
             population.add(individual);
         }
 
-        // Evolution loop
+
         for (int gen = 0; gen < generations; gen++) {
             // Calculate fitness for all individuals
             Map<List<Integer>, Double> fitness = new HashMap<>();
             for (List<Integer> ind : population) {
                 double dist = pathDistance(cities, ind);
-                // Fitness is inverse of distance (higher is better)
+
                 fitness.put(ind, 1.0 / (dist + 1));
             }
 
-            // Create new population
+
             List<List<Integer>> newPopulation = new ArrayList<>();
 
-            // Elitism: Keep the best individual
             List<Integer> best = population.get(0);
             double bestFitness = fitness.get(best);
             for (List<Integer> ind : population) {
@@ -272,7 +178,7 @@ public class TspService {
             }
             newPopulation.add(new ArrayList<>(best));
 
-            // Generate rest of population through selection, crossover, and mutation
+
             while (newPopulation.size() < populationSize) {
                 // Selection: Tournament selection
                 List<Integer> parent1 = tournamentSelect(population, fitness, random, tournamentSize);
@@ -292,7 +198,7 @@ public class TspService {
             population = newPopulation;
         }
 
-        // Return best solution from final population
+
         List<Integer> bestSolution = population.get(0);
         double bestDist = pathDistance(cities, bestSolution);
 
@@ -371,9 +277,7 @@ public class TspService {
         return child;
     }
 
-    /**
-     * Swap Mutation: Randomly swap two cities (excluding start city)
-     */
+
     private void swapMutate(List<Integer> individual, int startIndex, Random random) {
         int n = individual.size();
         if (n <= 2) return; // Can't mutate if only 2 cities
@@ -386,16 +290,7 @@ public class TspService {
         Collections.swap(individual, i, j);
     }
 
-    /**
-     * Calculate Euclidean distance between two cities
-     * Scaled by factor of 10 to represent kilometers
-     *
-     * Formula: distance = sqrt((x2-x1)² + (y2-y1)²) × 10
-     *
-     * @param a First city
-     * @param b Second city
-     * @return Distance in kilometers
-     */
+
     public double distance(city a, city b) {
         double dx = a.x - b.x;
         double dy = a.y - b.y;
@@ -403,14 +298,7 @@ public class TspService {
         return Math.sqrt(dx * dx + dy * dy) * 10;
     }
 
-    /**
-     * Calculate total distance of a path
-     * Sums up distances between consecutive cities in the path
-     *
-     * @param cities List of all cities
-     * @param order List of indices representing the path order
-     * @return Total distance of the path in kilometers
-     */
+
     public double pathDistance(List<city> cities, List<Integer> order) {
         double total = 0;
         for (int i = 0; i < order.size() - 1; i++) {

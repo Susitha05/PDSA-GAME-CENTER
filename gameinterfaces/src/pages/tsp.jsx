@@ -344,7 +344,7 @@ function TravellingSalesman() {
 
     // Toggle city selection
     const toggleCitySelection = (index) => {
-        if (index === homeCityIndex) return; // Can't deselect home city
+        if (index === homeCityIndex) return;
 
         if (selectedCities.includes(index)) {
             setSelectedCities(selectedCities.filter(i => i !== index));

@@ -5,8 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74a49512-f037-4b3a-bc4c-d3f2d697ef68" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/TSP/src/test/java/com/example/TSP/service/TspServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TSP/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TSP/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsp/src/main/java/com/example/tsp/service/TspService.java" beforeDir="false" afterPath="$PROJECT_DIR$/tsp/src/main/java/com/example/tsp/service/TspService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +26,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -38,14 +48,25 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.TspServiceTest$IndividualAlgorithmTimes.executor": "Run",
+    "JUnit.TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime.executor": "Run",
+    "JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds.executor": "Run",
+    "JUnit.TspServiceTest$StatisticalAnalysis.executor": "Run",
+    "JUnit.TspServiceTest.executionTimeFor15Rounds.executor": "Run",
+    "JUnit.TspServiceTest.executor": "Run",
+    "Maven.tsp [clean].executor": "Run",
     "Node.js.tsp.jsx.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.TrafficSimulationApplication.executor": "Run",
     "Spring Boot.TspApplication.executor": "Run",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "TSP",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,7 +79,100 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.example.tsp.service" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.TspApplication">
+    <configuration name="TspServiceTest$IndividualAlgorithmTimes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$IndividualAlgorithmTimes" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$IndividualAlgorithmTimes" />
+      <option name="METHOD_NAME" value="nearestNeighborExecutionTime" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$StatisticalAnalysis" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$StatisticalAnalysis" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$StatisticalAnalysis" />
+      <option name="METHOD_NAME" value="executionTimeFor15Rounds" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TspServiceTest.executionTimeFor15Rounds" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="tsp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.tsp.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.tsp.service" />
+      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest" />
+      <option name="METHOD_NAME" value="executionTimeFor15Rounds" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TrafficSimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Traffic-Simulation" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.PDSA.Traffic_Simulation.TrafficSimulationApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TspApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="tsp" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.tsp.TspApplication" />
@@ -66,6 +180,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis" />
+        <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds" />
+        <item itemvalue="JUnit.TspServiceTest.executionTimeFor15Rounds" />
+        <item itemvalue="JUnit.TspServiceTest$IndividualAlgorithmTimes" />
+        <item itemvalue="JUnit.TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -84,7 +207,8 @@
       <option name="presentableId" value="Default" />
       <updated>1765633953023</updated>
       <workItem from="1765633955678" duration="2262000" />
-      <workItem from="1765652009115" duration="32791000" />
+      <workItem from="1765652009115" duration="38192000" />
+      <workItem from="1765787443314" duration="14209000" />
     </task>
     <servers />
   </component>
