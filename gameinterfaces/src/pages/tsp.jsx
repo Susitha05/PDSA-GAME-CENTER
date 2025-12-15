@@ -306,7 +306,7 @@ function TravellingSalesman() {
 
     // Load new game
     const loadNewGame = async () => {
-        const res = await fetch("http://localhost:8081/tsp/new");
+        const res = await fetch("http://localhost:8085/tsp/new");
         const data = await res.json();
         setDots(data.points);
         setHomeCityIndex(data.homeCityIndex);
@@ -331,7 +331,7 @@ function TravellingSalesman() {
 
         const fetchScores = async () => {
             try {
-                const res = await fetch(`http://localhost:8081/tsp/${userName}`);
+                const res = await fetch(`http://localhost:8085/tsp/${userName}`);
                 const data = await res.json();
                 setscoreCard(data.scores);
             } catch (err) {
@@ -377,7 +377,7 @@ function TravellingSalesman() {
         // Get selected cities data
         const selectedCityData = selectedCities.map(idx => dots[idx]);
 
-        const res = await fetch("http://localhost:8081/tsp/solve", {
+        const res = await fetch("http://localhost:8085/tsp/solve", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -424,7 +424,7 @@ function TravellingSalesman() {
                 // Map user path to selected cities indices
                 const mappedUserPath = newPath.map(idx => selectedCities.indexOf(idx));
 
-                const res = await fetch("http://localhost:8081/tsp/check", {
+                const res = await fetch("http://localhost:8085/tsp/check", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({

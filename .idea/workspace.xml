@@ -5,17 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="74a49512-f037-4b3a-bc4c-d3f2d697ef68" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/TSP/src/test/java/com/example/TSP/service/TspServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TSP/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TSP/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameinterfaces/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameinterfaces/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameinterfaces/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameinterfaces/src/pages/game_display.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/pages/game_display.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/gameinterfaces/src/pages/tsp.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsp/src/main/java/com/example/tsp/service/TspService.java" beforeDir="false" afterPath="$PROJECT_DIR$/tsp/src/main/java/com/example/tsp/service/TspService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +46,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.SnakeLadderApplication.executor": "Run",
     "JUnit.TspServiceTest$IndividualAlgorithmTimes.executor": "Run",
     "JUnit.TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime.executor": "Run",
     "JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds.executor": "Run",
@@ -61,6 +60,9 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.EightQueensApplication.executor": "Run",
+    "Spring Boot.SnakeLadderApplication.executor": "Run",
+    "Spring Boot.TowerofHanoiApplication.executor": "Run",
     "Spring Boot.TrafficSimulationApplication.executor": "Run",
     "Spring Boot.TspApplication.executor": "Run",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
@@ -75,6 +77,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
     "ts.external.directory.path": "D:\\IntelliJ IDEA 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
@@ -88,6 +91,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.TspApplication">
+    <configuration name="SnakeLadderApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.snakeandladder.SnakeLadderApplication" />
+      <module name="backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.snakeandladder.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TspServiceTest$IndividualAlgorithmTimes" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="tsp" />
       <extension name="coverage">
@@ -99,22 +115,6 @@
       <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
       <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$IndividualAlgorithmTimes" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="tsp" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.tsp.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.tsp.service.TspServiceTest" />
-      <option name="MAIN_CLASS_NAME" value="com.example.tsp.service.TspServiceTest$IndividualAlgorithmTimes" />
-      <option name="METHOD_NAME" value="nearestNeighborExecutionTime" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -166,6 +166,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="EightQueensApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Eight-Queens" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.PDSA.Eight_Queens.EightQueensApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SnakeLadderApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="backend" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.snakeandladder.SnakeLadderApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TowerofHanoiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="TowerofHanoi" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.TowerofHanoi.TowerofHanoiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TrafficSimulationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Traffic-Simulation" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.PDSA.Traffic_Simulation.TrafficSimulationApplication" />
@@ -182,11 +203,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SnakeLadderApplication" />
         <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis" />
         <item itemvalue="JUnit.TspServiceTest$StatisticalAnalysis.executionTimeFor15Rounds" />
         <item itemvalue="JUnit.TspServiceTest.executionTimeFor15Rounds" />
         <item itemvalue="JUnit.TspServiceTest$IndividualAlgorithmTimes" />
-        <item itemvalue="JUnit.TspServiceTest$IndividualAlgorithmTimes.nearestNeighborExecutionTime" />
       </list>
     </recent_temporary>
   </component>
@@ -208,7 +229,7 @@
       <updated>1765633953023</updated>
       <workItem from="1765633955678" duration="2262000" />
       <workItem from="1765652009115" duration="38192000" />
-      <workItem from="1765787443314" duration="14209000" />
+      <workItem from="1765787443314" duration="16880000" />
     </task>
     <servers />
   </component>
